@@ -1,0 +1,10 @@
+Take Roll Proprietary License
+Copyright (c) 2026 Jake Harvanchik. All rights reserved to the extent of ownership and applicable law.
+
+The original Take Roll application code, design, and accompanying original materials are proprietary. No open-source license is granted for those materials. Access to the hosted service is licensed solely under its Terms of Service & EULA at https://takeroll.online/legal/terms.
+
+Except as expressly authorized in writing by Jake Harvanchik, those original materials may not be copied, distributed, published, sublicensed, sold, leased, or used to operate a competing hosted copy. No rights are granted by possession of or access to the source code. Exceptions required by applicable law remain available.
+
+This notice does not claim ownership of customer records, third-party software, fonts, provider trademarks, or other independently licensed material. Those materials remain subject to their own owners' rights and licenses, including permissions and notices that this license cannot restrict. See THIRD_PARTY_NOTICES.txt and public/third-party-notices.txt.
+
+Permission and legal inquiries: contact@takeroll.online.

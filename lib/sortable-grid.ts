@@ -1,0 +1,2 @@
+export function nearestGridSlot(rects:ReadonlyArray<{left:number;top:number;width:number;height:number}>,x:number,y:number){let target=0,distance=Infinity;for(const [index,r] of rects.entries()){const next=Math.hypot(x-r.left-r.width/2,y-r.top-r.height/2);if(next<distance){target=index;distance=next;}}return target;}
+export function displacedGridSlot(from:number,to:number,index:number){return to>from&&index>from&&index<=to?index-1:to<from&&index>=to&&index<from?index+1:index;}

@@ -1,0 +1,2 @@
+/** Claim only app-owned history traversals while the workspace is mounted. */
+export const historyStartupScript=`window.addEventListener('popstate',function(event){if(document.documentElement.dataset.takeRollHistory!=='active'||typeof event.state?.takeRollIndex!=='number')return;event.stopImmediatePropagation();window.dispatchEvent(new CustomEvent('take-roll:popstate',{detail:event.state}));},true);`;

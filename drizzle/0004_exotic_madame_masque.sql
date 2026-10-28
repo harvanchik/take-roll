@@ -1,0 +1,1 @@
+CREATE INDEX `organization_members_workspace_idx` ON `organization_members` (`organization_id`);

@@ -1,0 +1,24 @@
+'use client';
+import {useMemo,useRef,useState} from 'react';
+import {Link2} from 'lucide-react';
+import type {Data,Person,Roster} from '../lib/model';
+import {personForUid,personUid} from '../lib/person-identity';
+import {matchingPeoplePlan,personIdentity,samePerson,identityLinkBlocker} from '../lib/person-links';
+import {guardEdit} from '../lib/edit-conflicts';
+import {useNamePreferences} from './name-preferences';
+import Modal,{ConfirmationModal,ModalDismiss} from './modal';
+import PersonId from './person-id';
+
+type Action=(action:any)=>Promise<unknown>;
+export function MatchingPeopleControl({data,busy,onAction}:{data:Data;busy:boolean;onAction:Action}){
+ const [open,setOpen]=useState(false),[error,setError]=useState(''),plan=useMemo(()=>matchingPeoplePlan(data),[data]);
+ return <><button type="button" className="icon roster-link-matches" aria-label="Link Matching Names" data-tooltip="Link Matching Names" disabled={busy} onClick={()=>{setError('');setOpen(true);}}><Link2 size={17}/></button>{open&&<Modal title="Link Matching People" className="person-links-modal" dirty={false} close={()=>{if(!busy)setOpen(false);}}><p>{plan.links.length} matching {plan.links.length===1?'person':'people'} can be linked. Attendance, notes, flags, and history are kept.</p>{plan.links.length>0&&<div className="identity-review-list">{plan.links.map(group=><div key={group.canonical}>{group.name}</div>)}</div>}{plan.skipped.length>0&&<details className="identity-skipped"><summary>{plan.skipped.length} Kept Separate</summary>{plan.skipped.map((group,i)=><p key={group.name+i}><strong>{group.name}</strong> · {group.reason}</p>)}</details>}{!plan.links.length&&!plan.skipped.length&&data.personLinkReview&&<p className="muted">Last linked: {data.personLinkReview.linked} people.</p>}{error&&<p className="form-error" role="alert">{error}</p>}<div className="modal-confirm-actions"><button type="button" disabled={busy} onClick={()=>setOpen(false)}>Go Back</button><button type="button" className="primary" disabled={busy||!plan.links.length} onClick={async()=>{if(await onAction(guardEdit(data,{type:'link-matching-people'})))setOpen(false);else setError('Linking Was Not Saved. Reload And Review The Matches.');}}>Link {plan.links.length} {plan.links.length===1?'Match':'Matches'}</button></div></Modal>}</>;
+}
+export function PersonIdentityDialog({data,roster,person,busy,onAction,close}:{data:Data;roster:Roster;person:Person;busy:boolean;onAction:Action;close:()=>void}){
+ const {displayName}=useNamePreferences(),[uid,setUid]=useState(''),[confirmUnlink,setConfirmUnlink]=useState(false),[error,setError]=useState('');
+ const expected=useRef(guardEdit(data,{type:'unlink-roster-person'}).expected),identity=personIdentity(data,person.id,roster.id),code=personUid(data,person.id,roster.id),target=uid.length===7?personForUid(data,uid):undefined;
+ const memberships=data.rosters.filter(r=>[...r.people,...r.removedPeople??[]].some(p=>samePerson(data,p.id,identity,r.id)));
+ const linkBlocker=target?identityLinkBlocker(data,identity,target.id):undefined;
+ const submit=async(type:string)=>{if(await onAction({type,rosterId:roster.id,personId:person.id,uid,expected:expected.current}))close();else{setConfirmUnlink(false);setError('Identity Was Not Changed. Review The Latest Records Before Retrying.');}};
+ return <Modal title="Person Identity" className="person-links-modal" close={close}><p className="person-identity-name"><strong>{displayName(person)}</strong>{code&&<PersonId uid={code}/>}</p><p className="muted">{memberships.map(r=>r.name).join(' · ')}</p>{person.identityNote&&<p className="identity-notice">{person.identityNote}</p>}<form onSubmit={event=>{event.preventDefault();if(target&&target.id!==identity&&!linkBlocker)void submit('link-person-identity');}}><label>Link To Person ID<input value={uid} maxLength={7} minLength={7} autoComplete="off" spellCheck={false} placeholder="7-Character ID" onChange={event=>{setError('');setUid(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g,''));}}/></label>{uid&&<p className="link-person-preview" role="status">{target?displayName(target)+(target.id===identity?' · Already Linked':''):uid.length===7?'Person ID Not Found.':''}</p>}{(error||linkBlocker)&&<p className="form-error" role="alert">{linkBlocker||error}</p>}<div className="modal-confirm-actions identity-actions"><button type="button" className="danger" disabled={busy} onClick={()=>setConfirmUnlink(true)}>Unlink</button><ModalDismiss disabled={busy}>Go Back</ModalDismiss><button className="primary" disabled={busy||!target||target.id===identity||!!linkBlocker}>Link</button></div></form>{confirmUnlink&&<ConfirmationModal title="Unlink Person?" message="Create a new ID for this roster. Its saved attendance stays with it. Matching names will remain separate." confirmLabel="Unlink" pending={busy} cancel={()=>setConfirmUnlink(false)} confirm={()=>void submit('unlink-roster-person')}/>}</Modal>;
+}

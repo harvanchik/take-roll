@@ -1,0 +1,1 @@
+CREATE INDEX `organizations_owner_email_idx` ON `organizations` (`owner_email`);

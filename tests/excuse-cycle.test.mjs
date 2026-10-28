@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {ExcuseCycle,EXCUSE_SETTLE_MS} from '../lib/excuse-cycle.ts';
+function setup(initial=null){let serial=0;const jobs=new Map(),saved=[],shown=[];const cycle=new ExcuseCycle(initial,value=>saved.push(value),value=>shown.push(value),(callback,delay)=>{assert.equal(delay,EXCUSE_SETTLE_MS);jobs.set(++serial,callback);return serial;},id=>jobs.delete(id));return {cycle,jobs,saved,shown,settle(){const callbacks=[...jobs.values()];jobs.clear();callbacks.forEach(cb=>cb());}};}
+test('rapid excuse cycling updates the button immediately and commits only the final choice after settling',()=>{const s=setup();s.cycle.cycle();s.cycle.cycle();s.cycle.cycle();assert.deepEqual(s.shown,['work','academic','other']);assert.deepEqual(s.saved,[]);assert.equal(s.jobs.size,1);s.settle();assert.deepEqual(s.saved,['other']);s.cycle.cycle();s.settle();assert.deepEqual(s.saved,['other',null]);});
+test('a cycle back to the original choice creates no history; blur or navigation flushes once',()=>{const s=setup();for(let i=0;i<4;i++)s.cycle.cycle();s.settle();assert.deepEqual(s.saved,[]);s.cycle.cycle();s.cycle.cycle();s.cycle.flush();s.cycle.flush();s.settle();assert.deepEqual(s.saved,['academic']);});
+test('incoming save responses do not overwrite a cycle in progress; undo can sync after flush',()=>{const s=setup('work');s.cycle.cycle();s.cycle.sync('work');s.cycle.cycle();s.settle();assert.deepEqual(s.saved,['other']);s.cycle.sync('work');s.cycle.cycle();s.cycle.flush();assert.deepEqual(s.saved,['other','academic']);});
+
+
+test('browser excuse timers are called with the global receiver and discard cancels their pending save',()=>{let callback,cancelled=0;const saved=[];const cycle=new ExcuseCycle(null,value=>saved.push(value),()=>{},function(fn){assert.equal(this,globalThis);callback=fn;return 1;},function(){assert.equal(this,globalThis);cancelled++;});cycle.cycle();cycle.reset(null);assert.equal(cancelled,1);assert.deepEqual(saved,[]);cycle.cycle();callback();assert.deepEqual(saved,['work']);});

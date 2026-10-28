@@ -1,0 +1,4 @@
+'use client';
+import {useEffect} from 'react';
+import {applyTheme,DEFAULT_THEME,type ThemePreference} from '../lib/theme';
+export default function PreferenceSync(){useEffect(()=>{const sync=()=>{let theme:ThemePreference=DEFAULT_THEME;try{const saved=localStorage.getItem('roll-call-theme');if(saved==='light'||saved==='dark'||saved==='device')theme=saved;}catch{}applyTheme(theme);};const modes=['(prefers-color-scheme: dark)',...['standalone','window-controls-overlay','minimal-ui','fullscreen'].map(mode=>`(display-mode: ${mode})`)];const media=modes.map(query=>window.matchMedia(query));sync();media.forEach(query=>query.addEventListener('change',sync));window.addEventListener('storage',sync);return()=>{media.forEach(query=>query.removeEventListener('change',sync));window.removeEventListener('storage',sync);};},[]);return null;}

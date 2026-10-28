@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {dirname} from 'node:path';
+import {readFile,readdir,writeFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+import {completeD1} from './d1-mock.mjs';
+const require=createRequire(import.meta.url),{build}=require(require.resolve('esbuild',{paths:[dirname(require.resolve('wrangler/package.json'))]}));
+const sqlite=new DatabaseSync(':memory:');for(const f of (await readdir('drizzle')).filter(f=>f.endsWith('.sql')).sort())sqlite.exec(await readFile('drizzle/'+f,'utf8'));
+globalThis.__legalDB=completeD1({prepare(sql){const stmt=sqlite.prepare(sql);return {bind(...args){return {async first(){return stmt.get(...args)||null;},async run(){return {meta:{changes:Number(stmt.run(...args).changes)}};}};}};}},sqlite);
+await writeFile('.sites-runtime/legal-entry.ts',`export * from '../app/api/legal/route';export * from '../lib/page-access';export * from '../lib/legal-documents';`);
+await build({entryPoints:['.sites-runtime/legal-entry.ts'],bundle:true,platform:'node',format:'esm',outfile:'.sites-runtime/legal-test.mjs',plugins:[{name:'mock',setup(b){b.onResolve({filter:/^cloudflare:workers$/},()=>({path:'env',namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},()=>({contents:'export const env={DB:globalThis.__legalDB}',loader:'js'}));}}]});
+const {GET,POST,pageAccess,LEGAL_VERSION,agreementDigest}=await import('../.sites-runtime/legal-test.mjs');
+const request=(user,path='/api/legal',body,extra={})=>new Request('https://example.test'+path,{method:body?'POST':'GET',headers:{...(user?{'oai-authenticated-user-id':user,'oai-authenticated-user-email':user+'@example.test'}:{}),...(body?{'Content-Type':'application/json',Origin:'https://example.test'}:{}),...extra},...(body?{body:JSON.stringify(body)}:{})});
+assert.equal((await GET(request(null))).status,401);let info=await (await GET(request('alice'))).json();assert.equal(info.accepted,false);assert.equal(info.version,LEGAL_VERSION);assert.equal(info.documentHash,await agreementDigest());
+const body={accountId:info.accountId,revision:0,action:{type:'accept-agreement',version:info.version,documentHash:info.documentHash,adult:true,agree:true}};
+const signedOutEventSettings=await pageAccess(request(null,'/event-settings/private'),{DB:globalThis.__legalDB});assert.equal(signedOutEventSettings.response.status,303);assert.equal(await signedOutEventSettings.response.text(),'');
+for(const path of ['/events','/event/private/day-2','/event-settings/private','/settings','/roster/staff','/archive']){const gate=await pageAccess(request('alice',path),{DB:globalThis.__legalDB});assert.equal(gate.response.status,303);assert.ok(gate.response.headers.get('location').startsWith('/agreement?return_to='));assert.equal(await gate.response.text(),'');}
+for(const path of ['/api/attendance','/api/attendance/live','/api/organization','/api/workspaces','/api/%61ttendance','/api/attendance/']){for(const b of [undefined,{action:{type:'status'}}]){const gate=await pageAccess(request('alice',path,b),{DB:globalThis.__legalDB});assert.equal(gate.response.status,428);assert.equal((await gate.response.json()).code,'agreement_required');}}
+for(const path of ['/','/agreement','/legal/privacy','/legal/terms','/legal/cookies','/legal/data-processing','/third-party-notices.txt','/auth/callback'])assert.equal(await pageAccess(request('alice',path),{DB:globalThis.__legalDB}),null);
+assert.equal((await POST(request(null,'/api/legal',body))).status,401);
+assert.equal((await POST(request('bob','/api/legal',body))).status,403);
+for(const action of [{...body.action,agree:false},{...body.action,adult:false},{...body.action,agree:'true'},{...body.action,adult:1},{...body.action,type:'something-else'}])assert.equal((await POST(request('alice','/api/legal',{...body,action}))).status,400);
+for(const action of [{...body.action,version:'old'},{...body.action,documentHash:'forged'}])assert.equal((await POST(request('alice','/api/legal',{...body,action}))).status,409);
+assert.equal((await POST(request('alice','/api/legal',body,{Origin:'https://evil.test'}))).status,403);
+assert.equal((await POST(request('alice','/api/legal',body,{'sec-fetch-site':'cross-site'}))).status,403);
+assert.equal((await GET(request('alice'))).status,200);assert.equal((await (await GET(request('alice'))).json()).accepted,false);
+const accepted=await POST(request('alice','/api/legal',body));assert.equal(accepted.status,200);assert.equal((await accepted.json()).accepted,true);const row=sqlite.prepare('SELECT * FROM legal_acceptances').get();assert.equal(row.account_id,'chatgpt:alice');assert.equal(row.adult_confirmed,1);assert.ok(Number.isFinite(Date.parse(row.accepted_at)));
+assert.equal((await POST(request('alice','/api/legal',body))).status,200);assert.deepEqual(sqlite.prepare('SELECT * FROM legal_acceptances').get(),row);
+assert.equal((await (await GET(request('bob'))).json()).accepted,false);
+for(const path of ['/events','/event-settings/private','/api/attendance','/api/attendance/live','/api/organization','/api/workspaces'])assert.equal((await pageAccess(request('alice',path),{DB:globalThis.__legalDB})).response,undefined);
+sqlite.prepare('UPDATE legal_acceptances SET document_hash=?').run('stale');assert.equal((await pageAccess(request('alice','/api/attendance'),{DB:globalThis.__legalDB})).response.status,428);assert.equal((await POST(request('alice','/api/legal',body))).status,409);assert.equal(sqlite.prepare('SELECT document_hash FROM legal_acceptances').get().document_hash,'stale');
+assert.equal((await pageAccess(request('alice','/events'),{})).response.status,503);assert.equal((await pageAccess(request(null,'/events'),{})).response.status,303);
+for(const path of ['/events','/event/local/day-1','/rosters','/roster/local','/settings','/archive','/person/1234567'])assert.equal(await pageAccess(request(null,path+'?guest=1'),{}),null);
+for(const path of ['/api/attendance','/api/attendance/live','/api/organization','/api/workspaces'])assert.equal((await pageAccess(request(null,path+'?guest=1'),{DB:globalThis.__legalDB})).response.status,401);
+assert.equal((await pageAccess(request(null,'/events?guest=0'),{})).response.status,303);
+sqlite.close();console.log('Legal integration passed: mandatory account-scoped versioned acceptance, empty page redirects, every workspace API blocked before agreement, unchecked/underage/stale/forged/cross-site submissions rejected, idempotent durable timestamp/digest records, public policies, and fail-closed access.');

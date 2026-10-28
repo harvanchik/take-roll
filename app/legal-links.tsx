@@ -1,0 +1,1 @@
+export default function LegalLinks(){return <nav className="legal-links" aria-label="Legal"><a href="/legal/privacy">Privacy Policy</a><a href="/legal/terms">Terms & EULA</a><a href="/legal/cookies">Cookies</a><a href="/legal/data-processing">Data Processing</a><a href="mailto:contact@takeroll.online?subject=Privacy%20Request">Privacy Requests</a></nav>;}

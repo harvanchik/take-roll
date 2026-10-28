@@ -1,0 +1,1 @@
+export function shortcutTooltip(text:string,enabled:boolean){return enabled?text:text.replace(/\s*\([^)]*(?:Ctrl|Cmd|Alt \+|Shift \+|arrow keys)[^)]*\)/gi,'').replace(/\s*[·—-]\s*Alt\s*\+\s*arrow keys/gi,'').trim();}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#101c2a"/>
+<g transform="translate(62 51) scale(1.65)">
+<!-- Four equal-area diamond tiles follow the checkmark's two arms. -->
+<path fill="#99d5af" d="M1 15 7 9 13 15 7 21Z"/>
+<path fill="#ead290" d="M7 21 13 15 19 21 13 27Z"/>
+<path fill="#edb18d" d="M13 15 19 9 25 15 19 21Z"/>
+<path fill="#ec9a9a" d="M19 9 25 3 31 9 25 15Z"/>
+
+</g>
+<g fill="#fffdf8" font-family="Georgia,serif" font-weight="bold"><text x="129" y="91" font-size="35">Take Roll</text><text x="64" y="247" font-size="77">Take Roll.</text><text x="64" y="334" font-size="77">Keep Track.</text></g>
+<g font-family="Arial,sans-serif"><text x="67" y="389" font-size="23" fill="#b4bfcb">Every person. Every event. In sync.</text>
+<rect x="67" y="440" width="178" height="45" fill="#99d5af"/><text x="156" y="469" text-anchor="middle" font-size="17" font-weight="bold" fill="#101c2a">Start Taking Roll →</text>
+<rect x="701" y="174" width="435" height="302" fill="#203247"/>
+<rect x="689" y="162" width="435" height="302" fill="#192a3d" stroke="#35485d"/>
+<text x="715" y="197" font-size="11" font-weight="bold" letter-spacing="2" fill="#ead290">YOUR TEAM · TOGETHER</text>
+<text x="715" y="232" font-family="Georgia,serif" font-size="26" font-weight="bold" fill="#fffdf8">Team Check-In</text>
+<g stroke="#35485d"><path d="M714 252H1098M714 314H1098M714 376H1098"/></g>
+<g fill="#f1eadd" font-size="17"><text x="744" y="289">Alex Rivera</text><text x="744" y="351">Jordan Lee</text><text x="744" y="413">Taylor Morgan</text></g>
+<g fill="#b4bfcb" font-size="10"><text x="715" y="288">01</text><text x="715" y="350">02</text><text x="715" y="412">03</text></g>
+<rect x="973" y="268" width="125" height="32" fill="#99d5af"/><rect x="973" y="330" width="125" height="32" fill="#ead290"/><rect x="973" y="392" width="125" height="32" fill="#99d5af"/>
+<g fill="#101c2a" font-size="12" font-weight="bold" text-anchor="middle"><text x="1035" y="289">✓ Present</text><text x="1035" y="351">Bit Late</text><text x="1035" y="413">✓ Present</text></g>
+<text x="67" y="566" font-size="16" fill="#b4bfcb">Saved Rosters   /   Live Collaboration   /   Attendance History</text>
+<text x="1124" y="566" text-anchor="end" font-size="17" fill="#fffdf8">takeroll.online</text></g>
+<path d="M0 625H300" stroke="#99d5af" stroke-width="10"/><path d="M300 625H600" stroke="#ead290" stroke-width="10"/><path d="M600 625H900" stroke="#edb18d" stroke-width="10"/><path d="M900 625H1200" stroke="#ec9a9a" stroke-width="10"/>
+</svg>

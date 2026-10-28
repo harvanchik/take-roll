@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#101c2a"/><g transform="translate(192 212) scale(20)">
+<!-- Four equal-area diamond tiles follow the checkmark's two arms. -->
+<path fill="#99d5af" d="M1 15 7 9 13 15 7 21Z"/>
+<path fill="#ead290" d="M7 21 13 15 19 21 13 27Z"/>
+<path fill="#edb18d" d="M13 15 19 9 25 15 19 21Z"/>
+<path fill="#ec9a9a" d="M19 9 25 3 31 9 25 15Z"/>
+
+</g></svg>

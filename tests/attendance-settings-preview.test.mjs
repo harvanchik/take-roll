@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';import {test} from 'node:test';import {createRequire} from 'node:module';import {dirname} from 'node:path';import {DEFAULT_ATTENDANCE} from '../lib/attendance-settings.ts';import {organizationSettings} from '../lib/workspace-settings.ts';
+const require=createRequire(import.meta.url),{build}=require(require.resolve('esbuild',{paths:[dirname(require.resolve('wrangler/package.json'))]}));await build({entryPoints:['app/attendance-settings-preview.tsx'],bundle:true,platform:'node',format:'esm',jsx:'automatic',packages:'external',outfile:'.sites-runtime/accurate-settings-preview-test.mjs'});const {default:Preview,previewEvent}=await import('../.sites-runtime/accurate-settings-preview-test.mjs');const {createElement}=await import('react'),{renderToStaticMarkup}=await import('react-dom/server');
+const render=c=>renderToStaticMarkup(createElement(Preview,{config:c,organization:organizationSettings()}));
+test('preview uses the live table row and reacts to every display visibility setting',()=>{const html=render(DEFAULT_ATTENDANCE);for(const value of ['attendance-row','row-main','inline-person-note','timestamp-button','person-flag','Cycle Excuse Type','Preview Event Note'])assert.ok(html.includes(value),value);const hidden=render({...DEFAULT_ATTENDANCE,comments:false,flags:false,history:false,eventNote:false});for(const value of ['inline-person-note','timestamp-button','person-flag','Preview Event Note'])assert.ok(!hidden.includes(value),value);assert.ok(hidden.includes('data-comments="false"'));assert.ok(hidden.includes('data-history="false"'));});
+test('custom statuses, excuses, colors and labels feed the same interactive buttons as attendance',()=>{const c={...DEFAULT_ATTENDANCE,excusedLabel:'Approved',statuses:[{id:'status-remote',name:'Remote',color:'teal',active:true,attended:true,allowExcuse:true}],excuses:[{id:'excuse-travel',name:'Travel',code:'T',color:'indigo',active:true}]};const html=render(c);assert.ok(html.includes('Remote for Alexandra'));assert.ok(html.includes('--tone:#79c9c5'));assert.ok(html.includes('Approved for Alexandra'));assert.ok(!html.includes('Present for Alexandra'));const formButtons=html.match(/<button[^>]*>/g);assert.ok(formButtons.every(b=>b.includes('type="button"')));});
+test('removing preview choices clears only the sample display without mutating stored records',()=>{const event={participants:[{id:'p',status:'status-gone',excuse:'excuse-gone',note:'Keep',history:[]}]},copy=structuredClone(event);const next=previewEvent(event,DEFAULT_ATTENDANCE);assert.equal(next.participants[0].status,null);assert.equal(next.participants[0].excuse,null);assert.equal(next.participants[0].note,'Keep');assert.deepEqual(event,copy);});
+
+test('preview stats are static cards and have no reset control',()=>{
+ const html=render(DEFAULT_ATTENDANCE);assert.ok(!html.includes('Reset Preview'));
+ const stats=html.slice(html.indexOf('class="stats-grid'),html.indexOf('class="inline-event-note'));
+ assert.equal((stats.match(/class="stat(?: |")/g)||[]).length,6);
+ assert.ok(!stats.includes('<button'));assert.ok(!stats.includes('aria-pressed'));assert.ok(!stats.includes('chosen'));
+ for(const comments of [true,false])for(const history of [true,false]){
+  const rendered=render({...DEFAULT_ATTENDANCE,comments,history});assert.match(rendered,/<span[^>]*data-column="Attendance">Attendance<\/span>/);
+  assert.equal(rendered.includes('data-column="Notes"'),comments);assert.equal(rendered.includes('data-column="Last Changed"'),history);
+ }
+});

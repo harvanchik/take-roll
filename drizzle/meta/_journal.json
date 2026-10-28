@@ -1,0 +1,62 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1791851028364,
+      "tag": "0000_charming_sage",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792185100474,
+      "tag": "0001_material_matthew_murdock",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792185945160,
+      "tag": "0002_lethal_big_bertha",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792186462450,
+      "tag": "0003_steady_firebrand",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792186579479,
+      "tag": "0004_exotic_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792189243497,
+      "tag": "0005_cold_ben_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1792235769586,
+      "tag": "0006_unusual_vertigo",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1792414994714,
+      "tag": "0007_thin_nocturne",
+      "breakpoints": true
+    }
+  ]
+}

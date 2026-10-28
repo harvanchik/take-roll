@@ -1,0 +1,5 @@
+{
+  "reviewedAt": "2026-10-28T22:31:33.664Z",
+  "note": "Reviewed public source snapshot: synthetic fixtures and reserved test owner identity, omitted production project identifier and installation-specific repairs; live service, stored records, agreements and production deployment unchanged. Copyright, license and factual hosted-service legal notices retained.",
+  "digest": "5b30297639b006d9d798a23c7c137c8c0e86e2587cd49233f911a96b4378129b"
+}
