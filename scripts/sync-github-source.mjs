@@ -16,4 +16,11 @@ const removed=git(target,['ls-files','-z']).toString().split('\0').filter(file=>
 // Only obsolete tracked source files are removed, never untracked data or directories.
 for(const file of removed){const dest=checkedPath(file);if(existsSync(dest))unlinkSync(dest);}
 for(const file of files){const dest=checkedPath(file);mkdirSync(dirname(dest),{recursive:true});writeFileSync(dest,git(source,['show','HEAD:'+file]));}
-console.log(JSON.stringify({files:files.length,removed:removed.length,expectedTree:git(source,['rev-parse','HEAD^{tree}']).toString().trim(),githubOrigin:remote}));
+git(target,['add','--all']);
+// Windows does not expose Git executable bits through normal file copying.
+const entries=git(source,['ls-tree','-r','-z','HEAD']).toString().split('\0').filter(Boolean).map(entry=>{const [metadata,file]=entry.split('\t');return {mode:metadata.split(' ')[0],file};});
+for(const [mode,flag] of [['100644','--chmod=-x'],['100755','--chmod=+x']]){const paths=entries.filter(entry=>entry.mode===mode).map(entry=>entry.file);if(paths.length)git(target,['update-index',flag,'--',...paths]);}
+if(entries.some(entry=>!['100644','100755'].includes(entry.mode)))throw Error('Review unsupported source file mode before syncing.');
+const expectedTree=git(source,['rev-parse','HEAD^{tree}']).toString().trim(),actualTree=git(target,['write-tree']).toString().trim();
+if(actualTree!==expectedTree)throw Error('Source trees do not match; do not publish.');
+console.log(JSON.stringify({files:files.length,removed:removed.length,expectedTree,actualTree,githubOrigin:remote}));
