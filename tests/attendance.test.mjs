@@ -1,7 +1,8 @@
 import {formatTimestamp} from '../lib/dates.ts';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,parseNames,counts,filteredPeople,rollCallCSV,historyCSV,STATUSES,csv} from '../lib/model.ts';
+import {applyAction,parseNames,counts,filteredPeople,rollCallCSV,historyCSV,STATUSES,csv} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 const T1='2026-10-13T00:20:00.000Z',T2='2026-10-13T00:21:00.000Z',T3='2026-10-13T00:22:00.000Z';
 function setup(){let data=seedData(T1);data=applyAction(data,{type:'create-event',name:'Training',date:'2026-10-12',rosterId:data.rosters[0].id},T1);return data;}
 test('preserves 48 names and both JExample27 identities; splits pasted lists',()=>{const d=seedData(T1);assert.equal(d.rosters[0].people.length,48);const j=d.rosters[0].people.filter(p=>p.name==='JExample27');assert.equal(j.length,2);assert.notEqual(j[0].id,j[1].id);assert.deepEqual(parseNames('JExample25, RExample42\n\nMExample34, JExample29\r\n'),['JExample25','RExample42','MExample34','JExample29']);});

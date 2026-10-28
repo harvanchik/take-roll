@@ -2,7 +2,8 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {nextUnmarkedId,adjacentPersonId,keyboardSelection,keyboardStatus} from '../lib/attendance-keyboard.ts';
 import {defaultPreferences,validatePreferences} from '../lib/workspace-settings.ts';
-import {seedData,applyAction} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 const rows=[{id:'one',status:'Present'},{id:'two',status:null},{id:'removed',status:null,removed:true},{id:'three',status:null}];
 test('next unmarked follows visible order, wraps, and ignores removed people',()=>{
  assert.equal(nextUnmarkedId(rows,''),'two');assert.equal(nextUnmarkedId(rows,'two'),'three');assert.equal(nextUnmarkedId(rows,'three'),'two');

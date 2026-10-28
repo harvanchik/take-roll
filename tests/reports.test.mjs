@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,displayName} from '../lib/model.ts';
+import {applyAction,displayName} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {DEFAULT_REPORT_SETTINGS,reportSettings,REPORT_GROUPS} from '../lib/report-settings.ts';
 import {generateReport,reportPeople} from '../lib/reports.ts';
 const at='2026-10-13T01:53:00.000Z';

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {comparisonRows} from '../lib/subevents.ts';
 import {comparisonMatches,comparisonFilterCounts} from '../lib/comparison-filters.ts';
 const base={search:'',filter:[],unmarked:false,flagFilter:null};

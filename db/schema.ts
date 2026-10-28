@@ -22,3 +22,6 @@ export const legalAcceptances=sqliteTable('legal_acceptances',{
 
 // Remains after workspace deletion so the initial workspace is never resurrected.
 export const workspaceAccounts=sqliteTable('workspace_accounts',{accountId:text('account_id').primaryKey(),createdAt:text('created_at').notNull()});
+export const nativeAccountAliases=sqliteTable('native_account_aliases',{
+ email:text('email').primaryKey(),accountId:text('account_id').notNull().unique(),subject:text('subject').unique(),
+});

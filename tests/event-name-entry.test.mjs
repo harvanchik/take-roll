@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {seedData,applyAction,personFields} from '../lib/model.ts';
+import {applyAction,personFields} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 function setup(){let data=seedData();data=applyAction(data,{type:'create-event',rosterId:data.rosters[0].id,name:'Training',date:'2026-10-19'});return applyAction(data,{type:'create-subevent',eventId:data.events[0].id,name:'Afternoon',date:'2026-10-19'});}
 test('event name input preserves all five fields and only adds to the selected subevent',()=>{
  const data=setup(),target=data.events[1],before=target.participants.length;

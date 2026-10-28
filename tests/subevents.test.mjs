@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,counts} from '../lib/model.ts';
+import {applyAction,counts} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {eventFamily,familySummary,comparisonRows} from '../lib/subevents.ts';
 import {withSlugs,resolvePage,eventPath} from '../lib/navigation.ts';
 const at='2026-10-14T15:00:00Z';

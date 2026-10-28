@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {defaultOrganization} from '../lib/workspace-settings.ts';
-import {applyAction,seedData,personFromFields,displayName} from '../lib/model.ts';
+import {applyAction,personFromFields,displayName} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {nameTokens,encodeNameParts,encodeNameTokens,validateNameDisplay,formatCustomName} from '../lib/name-format.ts';
 import {replaceTokens,reorderNameFields,formatLength,fieldOffset} from '../lib/name-format-edit.ts';
 const field=(field,id=field)=>({kind:'field',field,id});

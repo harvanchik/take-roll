@@ -1,7 +1,9 @@
+import {installLegacyFixture} from './fixtures.mjs';
 import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {dirname} from 'node:path';import {DatabaseSync} from 'node:sqlite';import {readFile,readdir} from 'node:fs/promises';
 import {completeD1} from './d1-mock.mjs';
 const require=createRequire(import.meta.url),{build}=require(require.resolve('esbuild',{paths:[dirname(require.resolve('wrangler/package.json'))]}));
 const sqlite=new DatabaseSync(':memory:');for(const file of (await readdir('drizzle')).filter(f=>f.endsWith('.sql')).sort())sqlite.exec(await readFile('drizzle/'+file,'utf8'));
+installLegacyFixture(sqlite);
 globalThis.__settingsLiveDB={prepare(sql){const statement=sqlite.prepare(sql);return {bind(...args){return {async run(){return {meta:{changes:Number(statement.run(...args).changes)}};},async first(){return statement.get(...args)||null;}};}};}};
 completeD1(globalThis.__settingsLiveDB,sqlite);
 await build({stdin:{contents:"export {workspaceStream,notifyWorkspace} from './lib/live-updates';export {expandSaveReply} from './lib/save-packet';export {applyLivePatch} from './lib/live-patch';export {effectiveEventSettings} from './lib/event-settings';export {applyAction} from './lib/model';export {DEFAULT_ATTENDANCE} from './lib/attendance-settings';export {GET,POST} from './app/api/attendance/route';export {POST as organization} from './app/api/organization/route';export {guardEdit} from './lib/edit-conflicts';export {AttendanceQueue} from './lib/attendance-queue';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'.sites-runtime/settings-live-api-test.mjs',plugins:[{name:'db',setup(b){b.onResolve({filter:/^cloudflare:workers$/},()=>({path:'mock',namespace:'db'}));b.onLoad({filter:/.*/,namespace:'db'},()=>({contents:'export const env={DB:globalThis.__settingsLiveDB};',loader:'js'}));}}]});

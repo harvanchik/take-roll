@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,normalizeAttendanceData,reorderSubset,counts,historyCSV,rollCallCSV} from '../lib/model.ts';
+import {applyAction,normalizeAttendanceData,reorderSubset,counts,historyCSV,rollCallCSV} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {reportSettings} from '../lib/report-settings.ts';
 const at='2026-10-13T02:30:00Z';
 function setup(){let d=seedData(at);return applyAction(d,{type:'create-event',name:'Training',rosterId:d.rosters[0].id,date:'2026-10-12'},at);}

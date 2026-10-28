@@ -1,3 +1,4 @@
+import {installLegacyFixture} from './fixtures.mjs';
 import {completeD1} from './d1-mock.mjs';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
@@ -9,6 +10,7 @@ const {build}=require(require.resolve('esbuild',{paths:[dirname(require.resolve(
 const config={SUPABASE_URL:'https://unit-project.supabase.co',SUPABASE_PUBLISHABLE_KEY:'sb_publishable_test'};
 const origin='https://takeroll.online',prefix='sb-unit-project-auth-token';
 const db=new DatabaseSync(':memory:');for(const file of (await readdir('drizzle')).filter(f=>f.endsWith('.sql')).sort())db.exec(await readFile('drizzle/'+file,'utf8'));
+installLegacyFixture(db);
 globalThis.__authTestEnv={...config,DB:{prepare(sql){const statement=db.prepare(sql);return {bind(...args){return {async run(){return {meta:{changes:Number(statement.run(...args).changes)}};},async first(){return statement.get(...args)||null;}};}};}}};
 completeD1(globalThis.__authTestEnv.DB,db);
 await build({entryPoints:['app/api/attendance/route.ts'],bundle:true,platform:'node',format:'esm',outfile:'.sites-runtime/supabase-api-test.mjs',plugins:[{name:'test-env',setup(b){b.onResolve({filter:/^cloudflare:workers$/},()=>({path:'env',namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},()=>({contents:'export const env=globalThis.__authTestEnv;',loader:'js'}));}}]});
@@ -53,8 +55,8 @@ globalThis.fetch=async(input,init)=>{
 assert.equal((await api.GET(request())).status,401);
 const ownerHeaders={'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'owner@example.invalid'};
 const owner=await (await api.GET(request('/api/attendance','',null,ownerHeaders))).json();
-const ownerRecord=db.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').get('site-owner');
-assert.equal(owner.account.id,'site-owner');
+const ownerRecord=db.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').get('legacy-fixture-account');
+assert.equal(owner.account.id,'legacy-fixture-account');
 
 for(const provider of ['google','microsoft']){
  const started=await auth.startProviderSignIn(request('/auth/sign-in/'+provider+'?return_to=%2Fevent%2Ftraining%2Fday-2'),config,provider);
@@ -78,7 +80,7 @@ assert.equal(exchanges,2);
 assert.equal((await auth.completeProviderSignIn(request('/auth/callback?code=stolen-code'),config)).headers.get('location'),origin+'/?auth_error=callback');
 assert.equal((await auth.completeProviderSignIn(request('/auth/callback?error=access_denied'),config)).headers.get('location'),origin+'/?auth_error=cancelled');
 for(const name of ['apple','email','azure','constructor'])assert.equal((await auth.startProviderSignIn(request('/auth/sign-in/'+name),config,name)).status,404);
-const hostedStart=await auth.startProviderSignIn(new Request('https://take-roll.example/auth/sign-in/google?return_to=%2Fevents'),config,'google');
+const hostedStart=await auth.startProviderSignIn(new Request('https://jake-roll-call.harvanchik.chatgpt.site/auth/sign-in/google?return_to=%2Fevents'),config,'google');
 assert.equal(hostedStart.headers.get('location'),origin+'/auth/sign-in/google?return_to=%2Fevents');
 
 // A forged cookie's user object and email never grant ownership or change identity.
@@ -116,7 +118,7 @@ assert.equal(nativeOut.headers.get('location'),origin+'/');
 const outJar=cookieJar(nativeOut);
 assert.ok(outJar.includes('roll-call-auth-method=signed-out'));
 assert.equal((await api.GET(request('/api/attendance',outJar,null,nativeHeaders))).status,401);
-assert.equal((await api.POST(request('/api/attendance',outJar,{accountId:'site-owner',action:{type:'create-roster',name:'Blocked',names:'Blocked'}},nativeHeaders))).status,401);
+assert.equal((await api.POST(request('/api/attendance',outJar,{accountId:'legacy-fixture-account',action:{type:'create-roster',name:'Blocked',names:'Blocked'}},nativeHeaders))).status,401);
 const mixedOut=await auth.signOut(request('/auth/sign-out',cookieFor(issue(alice)),null,nativeHeaders),config);
 assert.equal(mixedOut.headers.get('location'),origin+'/');
 assert.equal((await api.GET(request('/api/attendance',cookieJar(mixedOut),null,nativeHeaders))).status,401);
@@ -129,13 +131,13 @@ assert.ok(nativeAgain.headers.getSetCookie().some(c=>c.startsWith('roll-call-aut
 const chatgpt=await auth.startChatGPTSignIn(request('/auth/chatgpt?return_to=%2Fevents',cookieFor(issue(alice))),config);
 assert.equal(chatgpt.headers.get('location'),origin+'/signin-with-chatgpt?return_to=%2Fevents');
 assert.ok(chatgpt.headers.getSetCookie().some(c=>c.includes('Max-Age=0')));
-const native=await auth.startChatGPTSignIn(new Request('https://take-roll.example/auth/chatgpt?return_to=%2Fevents'),config);
-assert.equal(native.headers.get('location'),'https://take-roll.example/signin-with-chatgpt?return_to=%2Fevents');
+const native=await auth.startChatGPTSignIn(new Request('https://jake-roll-call.harvanchik.chatgpt.site/auth/chatgpt?return_to=%2Fevents'),config);
+assert.equal(native.headers.get('location'),'https://jake-roll-call.harvanchik.chatgpt.site/signin-with-chatgpt?return_to=%2Fevents');
 assert.throws(()=>auth.authOrigin(new Request('https://evil.test/auth/callback')),/Unsupported/);
 const unsafe=await auth.startProviderSignIn(request('/auth/sign-in/google?return_to='+encodeURIComponent('//evil.test')),config,'google');
 assert.equal(new URL(unsafe.headers.get('location')).searchParams.get('redirect_to'),origin+'/auth/callback');
 assert.ok(unsafe.headers.getSetCookie().some(c=>c.startsWith('roll-call-auth-next=%2Fevents;')));
-assert.deepEqual(db.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').get('site-owner'),ownerRecord);
+assert.deepEqual(db.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').get('legacy-fixture-account'),ownerRecord);
 console.log('Supabase auth passed: Google/Microsoft PKCE callbacks, HttpOnly cookies, identity verification, fresh workspaces, account isolation, rejected Apple/email, refresh, sign-out, safe redirects, and exact ChatGPT owner-data preservation.');
 
 for(const action of [()=>auth.signOut(request('/auth/sign-out','',null,{'Sec-Fetch-Site':'cross-site'}),config),()=>auth.startChatGPTSignIn(request('/auth/chatgpt','',null,{Origin:'https://evil.test'}),config),()=>auth.startProviderSignIn(request('/auth/sign-in/google','',null,{'Sec-Fetch-Site':'cross-site'}),config,'google')])await assert.rejects(action,/Invalid origin/);

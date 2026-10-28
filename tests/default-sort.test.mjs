@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';import {test} from 'node:test';
 import {defaultSort,validateDefaultSort,personSortValue,SORT_CRITERIA} from '../lib/default-sort.ts';
 import {organizationSettings,defaultOrganization,validateOrganization} from '../lib/workspace-settings.ts';
-import {applyAction,seedData,personFields,replaceRosterPeople} from '../lib/model.ts';
+import {applyAction,personFields,replaceRosterPeople} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {effectiveEventSettings,eventSettingsDiff,mergeEventSettings} from '../lib/event-settings.ts';
 import {livePatch,applyLivePatch} from '../lib/live-patch.ts';
 import {DEFAULT_ATTENDANCE} from '../lib/attendance-settings.ts';

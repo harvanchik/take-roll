@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {parseRosterCSV,rosterCSV,personFields,personFromFields,seedData,applyAction,filteredPeople,CSV_HEADER} from '../lib/model.ts';
+import {parseRosterCSV,rosterCSV,personFields,personFromFields,applyAction,filteredPeople,CSV_HEADER} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 const T1='2026-10-13T01:00:00Z',T2='2026-10-13T01:01:00Z';
 const ROW='WExample55,Smith,sample pronunciation,SMITH,Will';
 test('CSV has five fields, optional header and optional fifth column',()=>{

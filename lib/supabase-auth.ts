@@ -1,10 +1,10 @@
 import {sameOriginMutation} from './request-security';
 import {createServerClient,parseCookieHeader,serializeCookieHeader,type CookieOptions} from '@supabase/ssr';
-import {attendanceAccount,type AttendanceAccount} from './owner-access';
+import {nativeAttendanceAccount,type AttendanceAccount} from './owner-access';
 import {safeSignInReturn,ORIGINAL_SITE_ORIGIN,signInHref} from './sign-in';
 import type {User} from '@supabase/supabase-js';
 
-export type AuthConfig={SUPABASE_URL?:string;SUPABASE_PUBLISHABLE_KEY?:string};
+export type AuthConfig={SUPABASE_URL?:string;SUPABASE_PUBLISHABLE_KEY?:string;DB?:D1Database};
 export const AUTH_PROVIDERS={google:'google',microsoft:'azure'} as const;
 const HOSTS=new Set(['takeroll.online','www.takeroll.online',new URL(ORIGINAL_SITE_ORIGIN).hostname]);
 const cookiePrefix=(url:string)=>'sb-'+new URL(url).hostname.split('.')[0]+'-auth-token';
@@ -35,7 +35,7 @@ export function createAuthContext(request:Request,config:AuthConfig){
   if(explicitlySignedOut)return null;
   // Explicit Supabase sessions take precedence. Never quietly switch accounts
   // when one expires, and never link a Supabase identity to owner data by email.
-  if(!hasSession&&!selectedSupabase)return attendanceAccount(request);
+  if(!hasSession&&!selectedSupabase)return nativeAttendanceAccount(request,config.DB);
   if(!client||!hasSession)return null;
   const {data,error}=await client.auth.getUser();
   const user=data.user;

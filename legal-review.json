@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-28T22:31:33.664Z",
-  "note": "Reviewed public source snapshot: synthetic fixtures and reserved test owner identity, omitted production project identifier and installation-specific repairs; live service, stored records, agreements and production deployment unchanged. Copyright, license and factual hosted-service legal notices retained.",
-  "digest": "5b30297639b006d9d798a23c7c137c8c0e86e2587cd49233f911a96b4378129b"
+  "reviewedAt": "2026-10-28T22:57:09.400Z",
+  "note": "Reviewed removal of account-specific seeds and completed event/person repair hooks. A schema-only migration adds native account mappings; mappings are established from existing unambiguous database ownership after verified native sign-in. Existing workspace keys, records, preferences, permissions and agreements remain intact. Synthetic fixtures are test-only. The same reviewed source is released to Sites and GitHub; private history and records stay unpublished. Existing hosted processing purposes and legal terms remain unchanged.",
+  "digest": "e9101ccf1a4c59eb05694d3a2d5c8d3f5bd96168b084547a8aeab1c13b420d0d"
 }

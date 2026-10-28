@@ -1,4 +1,4 @@
-export const ORIGINAL_SITE_ORIGIN='https://take-roll.example';
+export const ORIGINAL_SITE_ORIGIN='https://jake-roll-call.harvanchik.chatgpt.site';
 
 export function safeSignInReturn(value:string){
  if(value.length>2048||/[\\\u0000-\u0020\u007f]/.test(value)||!value.startsWith('/')||value.startsWith('//'))return '/events';

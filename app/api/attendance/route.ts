@@ -10,7 +10,7 @@ import {limitAccount} from '../../../lib/rate-limit';
 import {readMutation,RequestError,sameOriginMutation} from '../../../lib/request-security';
 import {readCurrentStore} from '../../../lib/archive-retention';
 import {purgeExpiredArchives,profileName} from '../../../lib/workspace-settings';
-import {seedData,applyAction,normalizeAttendanceData} from '../../../lib/model';
+import {applyAction,normalizeAttendanceData} from '../../../lib/model';
 import {withSlugs} from '../../../lib/navigation';
 import {createAuthContext,type AuthConfig} from '../../../lib/supabase-auth';
 import {resolveWorkspace,listWorkspaces,requestedWorkspace,assertAccess,accessPredicate,readPersonal,presentWorkspace,sharedData,savePersonal} from '../../../lib/organizations';
@@ -23,17 +23,14 @@ export async function GET(request:Request){
  const account=await auth.account();if(!account)return response({error:'Sign In To Open Your Attendance Records.'},401);
  if(!env.DB)throw Error('Database unavailable');
  const user=account.storeKey;await limitAccount(env.DB,user,false);
- const legacyId=account.isOwner?request.headers.get('oai-authenticated-user-id'):null;
- const legacy=legacyId?await env.DB.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').bind(legacyId).first<{data:string;revision:number}>():null;
  const workspaces=await listWorkspaces(env.DB,account);
- await env.DB.prepare('INSERT INTO attendance_stores (user_id,data,revision,updated_at) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM organizations WHERE id=? AND owner_id=?) ON CONFLICT(user_id) DO NOTHING').bind(user,legacy?.data||JSON.stringify(account.isOwner?seedData():{rosters:[],events:[]}),legacy?.revision||0,new Date().toISOString(),user,user).run();
+ await env.DB.prepare('INSERT INTO attendance_stores (user_id,data,revision,updated_at) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM organizations WHERE id=? AND owner_id=?) ON CONFLICT(user_id) DO NOTHING').bind(user,JSON.stringify({rosters:[],events:[]}),0,new Date().toISOString(),user,user).run();
  const workspace=await resolveWorkspace(env.DB,account,requestedWorkspace(request)),personal=await readPersonal(env.DB,account);
  const accountInfo={id:user,email:account.email,...(account.name?{name:account.name}:{}),isOwner:account.isOwner,provider:account.provider,workspaces};
  if(!workspace)return response({data:presentWorkspace({rosters:[],events:[]},personal),revision:0,account:{...accountInfo,organizationRole:'member'}});
  historyWorkspace=workspace.id;
  await rememberHistoryActor(env.DB,workspace.id,account,profileName(personal.profile,account.name||account.email.toLowerCase()));
- let row=await env.DB.prepare('SELECT data,revision FROM attendance_stores WHERE user_id=?').bind(workspace.id).first<{data:string;revision:number}>();
- row=await readCurrentStore(env.DB,workspace.id,accessPredicate(workspace,account));if(!row)throw Error('Workspace missing');
+ const row=await readCurrentStore(env.DB,workspace.id,accessPredicate(workspace,account));if(!row)throw Error('Workspace missing');
  await assertAccess(env.DB,workspace,account);
  return response({data:presentWorkspace(withSlugs(normalizeAttendanceData(JSON.parse(row.data))),personal),revision:row.revision,account:{...accountInfo,workspaceId:workspace.id,organizationRole:workspace.admin?'admin':'member'}});
  }catch(error){return response({error:error instanceof RequestError?error.message:'Could Not Load Attendance Records. Try Again.'},error instanceof RequestError?error.status:500);}

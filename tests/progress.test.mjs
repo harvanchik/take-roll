@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,counts} from '../lib/model.ts';
+import {applyAction,counts} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {attendanceSegments} from '../lib/progress.ts';
 function setup(){let d=seedData();return applyAction(d,{type:'create-event',name:'Training',date:'2026-10-15',rosterId:d.rosters[0].id});}
 test('progress separates excuse-only reasons from absence and counts combined attendance once',()=>{let d=setup();const e=d.events[0];const mark=(i,status,excuse)=>{d=applyAction(d,{type:'status',eventId:e.id,personId:e.participants[i].id,status});if(excuse)d=applyAction(d,{type:'excuse',eventId:e.id,personId:e.participants[i].id,excuse});};mark(0,'Present');mark(1,'Bit Late','work');mark(2,'Tardy','academic');mark(3,'Absent','other');mark(4,'Excused (work)');mark(5,'Excused (Academic)');mark(6,'Excused (Other)');const segments=attendanceSegments(d.events[0]);assert.deepEqual(segments.map(s=>s.count),[1,1,1,1,1,1,1]);assert.deepEqual(segments.slice(4).map(s=>s.tone),['work','academic','other']);assert.equal(segments.reduce((n,s)=>n+s.count,0),7);assert.ok(Math.abs(segments.reduce((n,s)=>n+s.percent,0)-7/48*100)<1e-9);assert.equal(counts(d.events[0]).values[3],1);});

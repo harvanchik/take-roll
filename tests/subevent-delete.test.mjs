@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {createRequire} from 'node:module';import {dirname} from 'node:path';
-import {applyAction,seedData} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {withSlugs,resolvePage,eventPath} from '../lib/navigation.ts';
 import {eventFamily,selectedComparisonEvents} from '../lib/subevents.ts';
 import {eventHistoryRows} from '../lib/event-history.ts';

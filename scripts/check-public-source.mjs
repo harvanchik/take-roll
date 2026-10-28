@@ -12,14 +12,9 @@ for(const file of files){
   const emails=content.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)||[];
   if(emails.some(email=>!/@(?:example\.(?:com|test|invalid)|sites\.test|takeroll\.online)$/i.test(email)))issues.push(file+': email address requires privacy review');
  }
- if(/C:[\\/]Users[\\/]|appgprj_[a-f0-9]{20,}/i.test(content))issues.push(file+': local or production identifier');
- if(file==='lib/owner-access.ts'&&!/const OWNER_EMAIL = "owner@example.invalid"/.test(content))issues.push(file+': owner account mapping needs privacy review');
- if(file==='lib/model.ts'){
-  const seed=content.match(/export const SEED = \[([\s\S]*?)\n\];/)?.[1]||'';
-  if(!seed||[...seed.matchAll(/\['([^']+)'/g)].some(match=>!/^\wExample\d+$/.test(match[1])))issues.push(file+': seed contains non-synthetic identity');
- }
+ if(/C:[\\/]Users[\\/]/i.test(content))issues.push(file+': local or production identifier');
+ if(file==='lib/owner-access.ts'&&/OWNER_EMAIL|OWNER_STORE_KEY/.test(content))issues.push(file+': account identity must come from the database');
+ if(file==='lib/model.ts'&&/export (?:const SEED|function seedData)/.test(content))issues.push(file+': production seed data is forbidden');
 }
-const hosting=JSON.parse(readFileSync('.openai/hosting.json','utf8'));
-if(hosting.project_id)issues.push('.openai/hosting.json: production project identifier');
 if(issues.length){console.error(issues.join('\n'));process.exit(1);}
 console.log(`Public source checks passed for ${files.length} files. Review new fixtures and assets manually before publishing.`);

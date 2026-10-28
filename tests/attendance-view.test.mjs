@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {captureAttendanceView,attendanceViewPeople} from '../lib/attendance-view.ts';
 function setup(){let d=seedData();return applyAction(d,{type:'create-event',name:'Training',date:'2026-10-12',rosterId:d.rosters[0].id});}
 test('unmarked rows stay visible with live statuses until the user changes view',()=>{let d=setup(),e=d.events[0],p=e.participants[0];const view=captureAttendanceView(e,'',[],true,null);d=applyAction(d,{type:'status',eventId:e.id,personId:p.id,status:'Present'});e=d.events[0];assert.equal(captureAttendanceView(e,'',[],true,view),view);assert.equal(attendanceViewPeople(e,view)[0].status,'Present');assert.equal(attendanceViewPeople(e,view).length,48);const next=captureAttendanceView(e,'',['Present'],false,view);assert.deepEqual(attendanceViewPeople(e,next).map(p=>p.id),[p.id]);const back=captureAttendanceView(e,'',[],true,next);assert.equal(attendanceViewPeople(e,back).length,47);});

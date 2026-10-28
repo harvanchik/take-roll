@@ -3,7 +3,8 @@ import {defaultPreferences,preferenceSettings,validatePreferences} from '../lib/
 import {formatDay,formatTimestamp} from '../lib/dates.ts';
 import {startingPath,readViewState,viewStateKey,readComparisonState} from '../lib/personal-navigation.ts';
 import {shortcutTooltip} from '../lib/shortcut-hints.ts';
-import {applyAction,seedData} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 test('all twelve personal preferences round trip without changing shared settings',()=>{
  const preferences={...defaultPreferences,tableDensity:'compact',defaultEventView:'overview',startingPage:'rosters',dateFormat:'iso',timeFormat:'24h',timeZone:'America/Chicago',rememberFilters:true,sidebarBehavior:'collapsed',reduceMotion:true,confirmBulkChanges:false,shortcutHints:false,showPersonIds:true};
  assert.deepEqual(validatePreferences(preferences),preferences);const before=seedData(),after=applyAction(before,{type:'update-preferences',preferences});assert.deepEqual(after.preferences,preferences);assert.deepEqual(after.rosters,before.rosters);assert.deepEqual(after.events,before.events);assert.equal(after.organization,before.organization);

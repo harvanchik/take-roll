@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {seedData,applyAction,normalizeAttendanceData} from '../lib/model.ts';
+import {applyAction,normalizeAttendanceData} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {defaultReportPresets,DEFAULT_REPORT_SETTINGS} from '../lib/report-settings.ts';
 const at='2026-10-13T22:00:00Z';
 function setup(){let d=seedData(at);return applyAction(d,{type:'create-event',name:'Staff Meeting',date:'2026-10-13',rosterId:d.rosters[0].id,note:'Room 2'},at);}

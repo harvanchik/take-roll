@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';import {test} from 'node:test';
-import {applyAction,seedData} from '../lib/model.ts';
+import {applyAction} from '../lib/model.ts';
+import {seedData} from './fixtures.mjs';
 import {effectiveEventSettings,eventSettingsSource,eventSettingsDraft,eventSettingsSnapshot,validateEventOverrides} from '../lib/event-settings.ts';
 import {organizationSettings} from '../lib/workspace-settings.ts';
 import {DEFAULT_ATTENDANCE} from '../lib/attendance-settings.ts';
