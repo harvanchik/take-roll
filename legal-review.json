@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-28T22:57:09.400Z",
-  "note": "Reviewed removal of account-specific seeds and completed event/person repair hooks. A schema-only migration adds native account mappings; mappings are established from existing unambiguous database ownership after verified native sign-in. Existing workspace keys, records, preferences, permissions and agreements remain intact. Synthetic fixtures are test-only. The same reviewed source is released to Sites and GitHub; private history and records stay unpublished. Existing hosted processing purposes and legal terms remain unchanged.",
-  "digest": "e9101ccf1a4c59eb05694d3a2d5c8d3f5bd96168b084547a8aeab1c13b420d0d"
+  "reviewedAt": "2026-10-29T17:20:43.838Z",
+  "note": "Reviewed shared viewport table limits, sticky table headers and Archive presentation matching Events while preserving existing archived-event actions, expiry, search, confirmations and test-only exclusions. No data model, account access, collection, retention or legal terms changed.",
+  "digest": "551083d3502ed6ac2578337054b60e3c52c294d78eb361ab1c6f8cb72479650a"
 }

@@ -18,6 +18,7 @@ test('archive cards use three compact icon actions and show the configured expir
  for(const retention of ['1d','7d','30d','3m','6m']){
   const html=render(h(NamePreferences,{settings:organizationSettings({archiveRetention:retention})},h(ArchiveList,{events:d.events,busy:false,onAction:async()=>true,onView(){}})));
   assert.equal((html.match(/<button/g)||[]).length,3);for(const tooltip of ['View Event','Restore Event','Delete Permanently'])assert.ok(html.includes('data-tooltip="'+tooltip+'"'));
+  assert.match(html,/events-grid archive-events-grid/);assert.match(html,/event-card archive-card/);assert.match(html,/<h3>Archived Meeting<\/h3>/);assert.match(html,/event-card-progress-row/);
   assert.ok(html.includes(archiveExpiresAt(d.events[0].archivedAt,retention).toISOString()));assert.match(html,/Expires/);assert.ok(!html.includes('<details'));assert.ok(!html.includes('archive-person'));
  }
 });
@@ -34,5 +35,5 @@ test('every archived-record mutation still fails on the server model',()=>{
 });
 
 test('test-only archive cards never expose attendance progress',()=>{
- const d=setup();d.events[0].settings={testOnly:true};const html=render(h(NamePreferences,{settings:organizationSettings({})},h(ArchiveList,{events:d.events,busy:false,onAction:async()=>true,onView(){}})));assert.match(html,/Test Only/);assert.doesNotMatch(html,/\d+\/\d+ Marked/);
+ const d=setup();d.events[0].settings={testOnly:true};const html=render(h(NamePreferences,{settings:organizationSettings({})},h(ArchiveList,{events:d.events,busy:false,onAction:async()=>true,onView(){}})));assert.match(html,/Test Only/);assert.doesNotMatch(html,/event-card-progress-row|segmented-progress|\d+\/\d+ Marked/);
 });
