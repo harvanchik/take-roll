@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-29T17:20:43.838Z",
-  "note": "Reviewed shared viewport table limits, sticky table headers and Archive presentation matching Events while preserving existing archived-event actions, expiry, search, confirmations and test-only exclusions. No data model, account access, collection, retention or legal terms changed.",
-  "digest": "551083d3502ed6ac2578337054b60e3c52c294d78eb361ab1c6f8cb72479650a"
+  "reviewedAt": "2026-11-11T14:15:11.231Z",
+  "note": "Reviewed selection-aware roll-call removal. Trash uses the existing guarded, recoverable bulk removal actions and count labels; no retention, authorization or legal terms changed.",
+  "digest": "f3492eff336a597bc4e94db96bcb60b3dd091a2cd087ae6f1c8298a1f6a9ed3a"
 }
