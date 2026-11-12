@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-11T14:15:11.231Z",
-  "note": "Reviewed selection-aware roll-call removal. Trash uses the existing guarded, recoverable bulk removal actions and count labels; no retention, authorization or legal terms changed.",
-  "digest": "f3492eff336a597bc4e94db96bcb60b3dd091a2cd087ae6f1c8298a1f6a9ed3a"
+  "reviewedAt": "2026-11-12T18:55:05.842Z",
+  "note": "Reviewed test event cards: same attendance progress presentation as official cards and Test Event badge. Test event data remains excluded from official attendance statistics and records; no policy changes needed.",
+  "digest": "f165261f72bfca48c8871e80ddc23f44a6e6c79a17f9bc3744e67cbb1c5f0927"
 }
