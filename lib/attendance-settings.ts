@@ -10,6 +10,10 @@ export const ATTENDANCE_PALETTE=[
  {id:'purple',name:'Purple',value:'var(--purple)'},{id:'pink',name:'Pink',value:'var(--academic)'},
  {id:'blue',name:'Blue',value:'var(--blue)'},{id:'teal',name:'Teal',value:'#79c9c5'},
  {id:'indigo',name:'Indigo',value:'#a8afe9'},{id:'lime',name:'Lime',value:'#bdd58b'},
+ {id:'sage',name:'Sage',value:'#a6c4ad'},{id:'seafoam',name:'Seafoam',value:'#a4d8cf'},
+ {id:'sky',name:'Sky',value:'#b0d5e8'},{id:'periwinkle',name:'Periwinkle',value:'#b9c3ed'},
+ {id:'lavender',name:'Lavender',value:'#cdbce0'},{id:'rose',name:'Rose',value:'#dcaebc'},
+ {id:'peach',name:'Peach',value:'#efc2a5'},{id:'sand',name:'Sand',value:'#d9c6a0'},
  {id:'gray',name:'Gray',value:'var(--gray)'},
  {id:'flag',name:'Signal Red',value:'var(--default-flag-color)'},{id:'check',name:'Signal Green',value:'var(--default-check-color)'}
 ] as const;
@@ -19,7 +23,9 @@ export const DEFAULT_ATTENDANCE:AttendanceSettings={
  excusedLabel:'Excused',comments:true,flags:true,history:true,excuseTypes:true,eventNote:true,flagColor:'flag',checkColor:'check'
 };
 export function attendanceSettings(org?:{attendance?:AttendanceSettings}):AttendanceSettings{return org?.attendance??DEFAULT_ATTENDANCE;}
-export function tone(color?:string){return ATTENDANCE_PALETTE.find(c=>c.id===color)?.value??'var(--gray)';}
+/** Accept only CSS hex colors; never arbitrary CSS expressions. */
+export function normalizeHexColor(value:unknown):string|null{if(typeof value!=='string')return null;const hex=value.trim().replace(/^#?/,'');if(!/^(?:[a-f\d]{3}|[a-f\d]{6})$/i.test(hex))return null;return '#'+(hex.length===3?[...hex].map(c=>c+c).join(''):hex).toLowerCase();}
+export function tone(color?:string){return normalizeHexColor(color)?? ATTENDANCE_PALETTE.find(c=>c.id===color)?.value??'var(--gray)';}
 export const excuseStatus=(id:string)=>id==='work'?'Excused (work)':id==='academic'?'Excused (Academic)':id==='other'?'Excused (Other)':'excuse:'+id;
 export function reasonFromStatus(status:string|null|undefined){return status==='Excused (work)'?'work':status==='Excused (Academic)'?'academic':status==='Excused (Other)'?'other':status?.startsWith('excuse:')?status.slice(7):null;}
 export function choiceLabel(id:string|null|undefined,c:AttendanceSettings){const reason=reasonFromStatus(id);return !id?'Unmarked':reason==='unspecified'?c.excusedLabel:reason?`${c.excusedLabel} (${c.excuses.find(e=>e.id===reason)?.code??reason})`:c.statuses.find(s=>s.id===id)?.name??id;}
@@ -34,7 +40,7 @@ export function validateAttendance(input:unknown):AttendanceSettings{
  if(!input||typeof input!=='object')throw new ValidationError('Choose Valid Attendance Settings.');
  const x=input as AttendanceSettings;
  const name=(v:unknown,max=40)=>{if(typeof v!=='string'||!v.trim()||v.length>max||/[\u0000-\u001f]/.test(v))throw new ValidationError('Use A Name Up To '+max+' Characters.');return v.trim();};
- const color=(v:unknown)=>{if(typeof v!=='string'||!ATTENDANCE_PALETTE.some(c=>c.id===v))throw new ValidationError('Choose A Preset Color.');return v;};
+ const color=(v:unknown)=>{const hex=normalizeHexColor(v);if(hex)return hex;if(typeof v!=='string'||!ATTENDANCE_PALETTE.some(c=>c.id===v))throw new ValidationError('Choose A Preset Or A Valid Hex Color.');return v;};
  const validId=(v:unknown,kind:'status'|'excuse')=>typeof v==='string'&&(kind==='status'?DEFAULT_ATTENDANCE.statuses.some(s=>s.id===v):DEFAULT_ATTENDANCE.excuses.some(e=>e.id===v))||typeof v==='string'&&new RegExp('^'+kind+'-[a-zA-Z0-9-]{1,64}$').test(v);
  if(!Array.isArray(x.statuses)||!Array.isArray(x.excuses)||x.statuses.length>100||x.excuses.length>100)throw new ValidationError('Too Many Attendance Choices.');
  const statuses=x.statuses.map(s=>{if(!s||!validId(s.id,'status')||typeof s.active!=='boolean'||typeof s.attended!=='boolean'||typeof s.allowExcuse!=='boolean')throw new ValidationError('Invalid Attendance Status.');return {id:s.id,name:name(s.name,15),color:color(s.color),active:s.active,attended:s.attended,allowExcuse:s.allowExcuse};});

@@ -1,0 +1,5 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {normalizeHexColor,tone,validateAttendance,DEFAULT_ATTENDANCE} from '../lib/attendance-settings.ts';
+test('custom hex colors normalize and survive saved attendance settings',()=>{assert.equal(normalizeHexColor(' #AbC '),'#aabbcc');assert.equal(normalizeHexColor('A6C4AD'),'#a6c4ad');assert.equal(tone('#abcdef'),'#abcdef');const c=structuredClone(DEFAULT_ATTENDANCE);c.statuses[0].color='#AbC';c.excuses[0].color='A6C4AD';c.flagColor='#123456';c.checkColor='seafoam';const saved=validateAttendance(c);assert.equal(saved.statuses[0].color,'#aabbcc');assert.equal(saved.excuses[0].color,'#a6c4ad');assert.equal(saved.flagColor,'#123456');assert.equal(saved.checkColor,'seafoam');});
+test('custom colors reject CSS expressions and malformed hex values',()=>{for(const color of ['#1234','#12345678','url(https://example.test/x)','red;display:none','#ggg','var(--text)']){assert.equal(normalizeHexColor(color),null);assert.throws(()=>validateAttendance({...structuredClone(DEFAULT_ATTENDANCE),flagColor:color}));}});

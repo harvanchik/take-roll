@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-12T18:55:05.842Z",
-  "note": "Reviewed test event cards: same attendance progress presentation as official cards and Test Event badge. Test event data remains excluded from official attendance statistics and records; no policy changes needed.",
-  "digest": "f165261f72bfca48c8871e80ddc23f44a6e6c79a17f9bc3744e67cbb1c5f0927"
+  "reviewedAt": "2026-11-13T21:29:07.664Z",
+  "note": "Reviewed attendance presentation changes: measured status columns reuse notes width, compact palette with validated custom hex colors in existing settings, accessible Not Included dash. No new collection, providers, sharing, retention, authentication, cookies, exports, or agreement terms; policies and accepted versions remain accurate and unchanged.",
+  "digest": "3aecf0821ad62904f679800491010af3a689e3bb5fd7904cec8f93cae920e3c2"
 }
