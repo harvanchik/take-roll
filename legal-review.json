@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-13T22:07:08.252Z",
-  "note": "Reviewed complete pending release: selection-aware recoverable removal with exclusive dismissible banners, table wheel handoff, roster-based subevent creation, test card display, and sign-in recovery. No new processing purposes, retention, access or legal terms.",
-  "digest": "8957a939638af1b4a0b2d6983c760751043edd7508fb62b2d82cfff2e6434ad6"
+  "reviewedAt": "2026-11-13T22:14:30.524Z",
+  "note": "Reviewed row drag selection and switching between recoverable removal confirmations. Interaction-only fixes, no changes to access, retention or data processing.",
+  "digest": "ecc12e775603616207f5d3d5d944569afa1628452cb7af82bfafb7fbe5a4b16e"
 }
