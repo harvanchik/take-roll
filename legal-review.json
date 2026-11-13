@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-13T22:03:31.412Z",
-  "note": "Reviewed audited pending UI fixes and shared removal-banner dismissal. Only one removal confirmation remains open; selection changes dismiss stale confirmations. Recoverable removal, permissions and data retention unchanged.",
-  "digest": "aad3a313c6fbb881a4b8df9aebbc78472fcc20d62b43b32c6bacda73112ab661"
+  "reviewedAt": "2026-11-13T22:07:08.252Z",
+  "note": "Reviewed complete pending release: selection-aware recoverable removal with exclusive dismissible banners, table wheel handoff, roster-based subevent creation, test card display, and sign-in recovery. No new processing purposes, retention, access or legal terms.",
+  "digest": "8957a939638af1b4a0b2d6983c760751043edd7508fb62b2d82cfff2e6434ad6"
 }
