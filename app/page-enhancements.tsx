@@ -1,5 +1,6 @@
 'use client';
 import {Component,useEffect,useState,type ReactNode} from 'react';
+import TableScrollChaining from './table-scroll-chaining';
 import PreferenceSync from './preference-sync';
 import {installViewportGuards} from '../lib/installed-viewport';
 import HapticFeedback from './haptic-feedback';
@@ -29,6 +30,7 @@ function StorageNotice(){
 }
 
 export default function PageEnhancements(){useEffect(()=>installViewportGuards(),[]);return <>
+ <EnhancementBoundary><TableScrollChaining/></EnhancementBoundary>
  <EnhancementBoundary><Tooltips/></EnhancementBoundary>
  <EnhancementBoundary><HapticFeedback/></EnhancementBoundary>
  <EnhancementBoundary><PreferenceSync/></EnhancementBoundary>

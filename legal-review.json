@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-13T21:56:39.055Z",
-  "note": "Reviewed roster-based subevent membership, table scroll chaining, confirmation visibility and overview help cursors; retained latest attendance column and palette changes. No legal policy changes.",
-  "digest": "fc179217374dd183f43c2606d8ac4a6ab4c66cc15e0d949855c6c5b66770f056"
+  "reviewedAt": "2026-11-13T22:03:31.412Z",
+  "note": "Reviewed audited pending UI fixes and shared removal-banner dismissal. Only one removal confirmation remains open; selection changes dismiss stale confirmations. Recoverable removal, permissions and data retention unchanged.",
+  "digest": "aad3a313c6fbb881a4b8df9aebbc78472fcc20d62b43b32c6bacda73112ab661"
 }

@@ -1,4 +1,5 @@
 'use client';
+import useRemovalBanner,{closeRemovals,CLOSE_REMOVALS} from './use-removal-banner';
 import {reducedMotion} from '../lib/motion';
 
 import {useState,useRef,useEffect,type ReactNode} from 'react';
@@ -19,7 +20,7 @@ import ViewOnlyFollowup from './view-only-followup';
 export function AttendanceRow({keyboardActive=false,keyboardEnabled=false,keyboardMode=false,keyboardSelected=false,onStatusSelect,noteEditor,onActivate,onSelectRow,onRemoveSelected,bulkRemoval,recordUid,workspaceId,onNavigate,person:p,index,duplicate,duplicateNumber,busy,onAction,onHistoryVisibility,demo=false,lastVisible=false,readOnly=false,preview=false}: {onRemoveSelected?:()=>boolean;bulkRemoval?:ReactNode;onSelectRow?:(extend:boolean,add:boolean)=>void;keyboardActive?:boolean;keyboardEnabled?:boolean;keyboardMode?:boolean;keyboardSelected?:boolean;onStatusSelect?:(status:string)=>Promise<unknown>;noteEditor?:{draft?:string;change:(value:string)=>void;composition:(active:boolean)=>void;blur:()=>void};onActivate?:(preserveSelection?:boolean)=>void;recordUid?:string;workspaceId?:string;onNavigate?:(path:string)=>void;preview?:boolean;readOnly?:boolean;lastVisible?:boolean;onHistoryVisibility?:(open:boolean)=>void;demo?:boolean;person:Participant;index:number;duplicate:boolean;duplicateNumber:number;busy:boolean;onAction:(action:any)=>Promise<unknown>}){
  const {displayName,displayPronunciation,settings,attendance:config}=useNamePreferences();
  const personal=usePersonalPreferences(),{formatTimestamp:stamp}=useDisplayDates();
- const [open,setOpen]=useState(false),[remove,setRemove]=useState(false);const name=displayName(p);const noteFlush=useRef<()=>void>(()=>{});
+ const [open,setOpen]=useState(false),[remove,setRemove]=useRemovalBanner();const name=displayName(p);const noteFlush=useRef<()=>void>(()=>{});
  const modifiedPointer=useRef(false);
  const removalBanner=useRef<HTMLDivElement>(null);
  useEffect(()=>{if(!remove)return;const frame=requestAnimationFrame(()=>removalBanner.current?.scrollIntoView({block:'nearest',inline:'nearest',behavior:reducedMotion()?'auto':'smooth'}));return()=>cancelAnimationFrame(frame);},[remove,lastVisible]);
