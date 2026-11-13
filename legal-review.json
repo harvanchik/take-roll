@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-13T21:29:07.664Z",
-  "note": "Reviewed attendance presentation changes: measured status columns reuse notes width, compact palette with validated custom hex colors in existing settings, accessible Not Included dash. No new collection, providers, sharing, retention, authentication, cookies, exports, or agreement terms; policies and accepted versions remain accurate and unchanged.",
-  "digest": "3aecf0821ad62904f679800491010af3a689e3bb5fd7904cec8f93cae920e3c2"
+  "reviewedAt": "2026-11-13T21:56:39.055Z",
+  "note": "Reviewed roster-based subevent membership, table scroll chaining, confirmation visibility and overview help cursors; retained latest attendance column and palette changes. No legal policy changes.",
+  "digest": "fc179217374dd183f43c2606d8ac4a6ab4c66cc15e0d949855c6c5b66770f056"
 }
