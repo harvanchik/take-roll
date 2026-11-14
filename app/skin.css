@@ -1685,3 +1685,7 @@ button.person-id{cursor:pointer}
 .app-shell[data-comments=false][data-history=true] .attendance-table-scroll:is(.attendance-table-scroll) :is(.row-main,.table-label){grid-template-columns:28px 170px minmax(var(--attendance-width,340px),1fr) 155px var(--row-tools-width,52px)}
 .app-shell[data-comments=false][data-history=false] .attendance-table-scroll:is(.attendance-table-scroll) :is(.row-main,.table-label){grid-template-columns:28px 170px minmax(var(--attendance-width,340px),1fr) var(--row-tools-width,52px)}
 .attendance-table-scroll.removed-table{--row-tools-width:80px}
+
+/* Keep long selected roster names inside the event form grid. */
+.app-modal .form-two{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}.app-modal form,.app-modal .form-two>label{min-width:0;max-width:100%}.app-modal .form-two .app-select-trigger{max-width:100%;overflow:hidden}.app-modal .form-two .app-select-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:480px){.app-modal .form-two{grid-template-columns:minmax(0,1fr)}}
