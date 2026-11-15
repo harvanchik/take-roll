@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T21:55:24.217Z",
-  "note": "Reviewed single/all-subevent report selection, clearly labeled attendance-entry totals and per-subevent text exports, inline italic notes and minimal hover scaling. Existing data and export purposes unchanged; no legal updates needed.",
-  "digest": "e06329fd927bc03cf4b2c1e666d86cb6e02c108dc6b572749e84f1ba54881ae5"
+  "reviewedAt": "2026-11-15T22:16:34.203Z",
+  "note": "Reviewed enabling existing reports within test events with explicit test-only labeling in visual and text exports. Test data remains excluded from official cross-event records and statistics. No changes to processing purposes or legal terms.",
+  "digest": "63c9c7fc6277ae1dec26d0515e630027c9664d7c6033cb13319bf29ab0544973"
 }
