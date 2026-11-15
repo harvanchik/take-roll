@@ -1,5 +1,6 @@
 'use client';
 import {Component,useEffect,useState,type ReactNode} from 'react';
+import PersonTextMarquee from './person-text-marquee';
 import TableScrollChaining from './table-scroll-chaining';
 import PreferenceSync from './preference-sync';
 import {installViewportGuards} from '../lib/installed-viewport';
@@ -31,6 +32,7 @@ function StorageNotice(){
 
 export default function PageEnhancements(){useEffect(()=>installViewportGuards(),[]);return <>
  <EnhancementBoundary><TableScrollChaining/></EnhancementBoundary>
+ <EnhancementBoundary><PersonTextMarquee/></EnhancementBoundary>
  <EnhancementBoundary><Tooltips/></EnhancementBoundary>
  <EnhancementBoundary><HapticFeedback/></EnhancementBoundary>
  <EnhancementBoundary><PreferenceSync/></EnhancementBoundary>

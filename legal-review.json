@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:32:23.860Z",
-  "note": "Reviewed user-facing merge/add terminology, ID example placeholder, no discard warning for add-existing modal, and shared dialog autofocus on useful editable fields. Identity operations and permissions unchanged; no legal updates.",
-  "digest": "e7714897109f5cf94030e2bea843139cab0683e6f7ce3b524fdfe48b1cd02ae1"
+  "reviewedAt": "2026-11-15T22:38:41.169Z",
+  "note": "Reviewed shared overflow-only name/pronunciation marquee across roster, roll call, overview, mobile, person record, reports and previews; full-text tooltips and reduced-motion support. Compact roster columns allow notes to shrink before horizontal table overflow. Presentation only, no new processing or legal changes.",
+  "digest": "cbe89dacdf5ab877a5b68264503c5875c1810d0bac5a8f246ade8eb4ceae388f"
 }
