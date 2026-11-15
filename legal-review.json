@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:50:46.472Z",
-  "note": "Reviewed removal of legacy roster minimum widths so columns fit the viewport, reserve four action buttons, shrink notes and use existing pronunciation marquee. Presentation-only correction; no legal changes.",
-  "digest": "e8307e4c1e4b8b834aba8658faac1242903de4efd96adeceab372c82bcf1c9fa"
+  "reviewedAt": "2026-11-15T22:53:09.319Z",
+  "note": "Reviewed smooth fast marquee return and naturally adjacent, stationary copyable IDs. Presentation only; no data or legal changes.",
+  "digest": "2f17be9106dbb457bf08e5ade36d674559f4ee5a367e9632fc33d7b0a75655f3"
 }
