@@ -30,7 +30,7 @@ export function matchingPeoplePlan(data:Data){
   if(roots.size<2)continue;
   const name=[personFields(members[0].person).firstName,personFields(members[0].person).lastName].join(' ');
   const preferred=new Set(members.map(m=>clean(personFields(m.person).preferredFirstName)).filter(Boolean));
-  const reason=[...roots].some(id=>data.personLinkExcluded?.includes(id))?'Manually Unlinked':[...roots].some(id=>(rootNames.get(id)?.size??0)>1)?'Linked Identity Has Different Names':preferred.size>1?'Different Preferred Names':conflict(data,roots);
+  const reason=[...roots].some(id=>data.personLinkExcluded?.includes(id))?'Manually Separated':[...roots].some(id=>(rootNames.get(id)?.size??0)>1)?'Merged Identity Has Different Names':preferred.size>1?'Different Preferred Names':conflict(data,roots);
   if(reason){skipped.push({name,reason});continue;}
   links.push({name,canonical:personIdentity(data,members[0].person.id,members[0].rosterId),ids:[...roots]});
  }
@@ -51,7 +51,7 @@ export function autoLinkNewPeople(data:Data,rosterId:string,people:Person[]):Per
   if(!roots.size)return p;
   const root=[...roots][0],preferred=clean(personFields(p).preferredFirstName),differentPreferred=matches.some(m=>{const other=clean(personFields(m.person).preferredFirstName);return preferred&&other&&preferred!==other;});
   const roster=data.rosters.find(r=>r.id===rosterId),duplicateHere=(counts.get(key)??0)>1||[...roster?.people??[],...roster?.removedPeople??[]].some(other=>identityName(other)===key||personIdentity(data,other.id,rosterId)===root);
-  const reason=duplicateHere?'Duplicate Name In This Roster':roots.size!==1?'Multiple Matching People':data.personLinkExcluded?.includes(root)||personIdentity(data,root,rosterId)!==root?'Manually Unlinked':differentPreferred?'Different Preferred Names':undefined;
+  const reason=duplicateHere?'Duplicate Name In This Roster':roots.size!==1?'Multiple Matching People':data.personLinkExcluded?.includes(root)||personIdentity(data,root,rosterId)!==root?'Manually Separated':differentPreferred?'Different Preferred Names':undefined;
   return reason?{...p,identityNote:reason}:{...p,id:root};
  });
 }
@@ -60,7 +60,7 @@ export function identityLinkBlocker(data:Data,sourceId:string,targetId:string):s
  const source=personIdentity(data,sourceId),target=personIdentity(data,targetId);
  if(source===target)return;
  const reason=conflict(data,new Set([source,target]));
- if(reason==='Different Person Notes')return 'Both people have different notes. Resolve the notes before linking so neither is lost.';
+ if(reason==='Different Person Notes')return 'Both people have different notes. Resolve the notes before merging so neither is lost.';
  if(reason==='Multiple Matching People In One Roster')return 'These entries are in the same roster. Linking works across different rosters; same-roster entries need separate attendance records.';
  if(reason)return 'Both people have attendance entries in the same subevent. They need separate IDs to keep those records distinct.';
 }
@@ -76,17 +76,17 @@ export function autoLinkEditedPerson(data:Data,rosterId:string,personId:string,p
  const entries=rosterEntries(data).filter(entry=>entry.rosterId!==rosterId),matches=entries.filter(entry=>identityName(entry.person)===identityName(p)),roots=new Set(matches.map(m=>personIdentity(data,m.person.id,m.rosterId)));
  if(!roots.size||roots.size===1&&roots.has(root))return data;
  const preferred=clean(personFields(p).preferredFirstName);
- const reason=roots.size>1?'Multiple Matching People':entries.some(m=>personIdentity(data,m.person.id,m.rosterId)===root)?'Already Linked To Another Roster':data.personLinkExcluded?.includes([...roots][0])?'Manually Unlinked':matches.some(m=>preferred&&clean(personFields(m.person).preferredFirstName)&&preferred!==clean(personFields(m.person).preferredFirstName))?'Different Preferred Names':conflict(data,new Set([root,...roots]));
+ const reason=roots.size>1?'Multiple Matching People':entries.some(m=>personIdentity(data,m.person.id,m.rosterId)===root)?'Already Added To Another Roster':data.personLinkExcluded?.includes([...roots][0])?'Manually Separated':matches.some(m=>preferred&&clean(personFields(m.person).preferredFirstName)&&preferred!==clean(personFields(m.person).preferredFirstName))?'Different Preferred Names':conflict(data,new Set([root,...roots]));
  if(reason){p.identityNote=reason;return data;}
  return linkPersonIdentity(data,root,[...roots][0],at);
 }
 export function unlinkRosterIdentity(data:Data,rosterId:string,personId:string,newId:string):Data{
  const roster=data.rosters.find(r=>r.id===rosterId),person=roster?.people.find(p=>p.id===personId);if(!roster||!person)throw new ValidationError('Person No Longer Exists In This Roster.');
  const root=personIdentity(data,person.id,rosterId),sourceIds=new Set<string>([person.id]);
- if(roster.people.filter(p=>personIdentity(data,p.id,rosterId)===root).length>1)throw new ValidationError('Multiple Entries Share This Identity. Review Them Before Unlinking.');
+ if(roster.people.filter(p=>personIdentity(data,p.id,rosterId)===root).length>1)throw new ValidationError('Multiple Entries Share This Identity. Review Them Before Separating.');
  for(const event of data.events.filter(e=>e.rosterId===rosterId))for(const p of event.participants)if(personIdentity(data,p.id,rosterId)===root)sourceIds.add(p.id);
  const scopes={...data.personScopes?.[rosterId]};for(const id of sourceIds)scopes[id]=newId;
  // All event objects, attendance, notes, flags, timestamps and histories are retained byte-for-byte.
  const personNotes={...data.personNotes};if(personNotes[root])personNotes[newId]=personNotes[root];
- return {...data,personNotes,rosters:data.rosters.map(r=>r.id===rosterId?{...r,people:r.people.map(p=>p.id===personId?{...p,id:newId,identityNote:'Manually Unlinked'}:p)}:r),personScopes:{...data.personScopes,[rosterId]:scopes},personLinkExcluded:[...new Set([...(data.personLinkExcluded??[]),newId])]};
+ return {...data,personNotes,rosters:data.rosters.map(r=>r.id===rosterId?{...r,people:r.people.map(p=>p.id===personId?{...p,id:newId,identityNote:'Manually Separated'}:p)}:r),personScopes:{...data.personScopes,[rosterId]:scopes},personLinkExcluded:[...new Set([...(data.personLinkExcluded??[]),newId])]};
 }

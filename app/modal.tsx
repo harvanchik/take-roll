@@ -14,6 +14,10 @@ export default function Modal({title,children,close,className='',icon,dirty}:{ti
  const [confirm,setConfirm]=useState(false);
  const requestClose=()=>{if(dirty??(ref.current&&baseline.current.dirty(ref.current)))setConfirm(true);else close();};
  useEffect(()=>{const active=document.activeElement as HTMLElement|null,dialog=ref.current;if(!dialog)return;dialog.showModal();baseline.current.remember(dialog);
+  // Respect explicit focus choices; otherwise put typing focus in the first useful field.
+  const preferred=dialog.querySelector<HTMLElement>('[autofocus]');
+  const field=preferred??dialog.querySelector<HTMLElement>('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not(:disabled):not([readonly]),textarea:not(:disabled):not([readonly])');
+  if(field&&field.getClientRects().length)field.focus({preventScroll:true});
   const observer=new MutationObserver(()=>baseline.current.remember(dialog));observer.observe(dialog,{childList:true,subtree:true});
   return()=>{observer.disconnect();if(dialog.open)dialog.close();if(active?.isConnected)active.focus({preventScroll:true});};
  },[]);

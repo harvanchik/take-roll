@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:27:58.992Z",
-  "note": "Reviewed roster grid sizing: fixed name and pronunciation columns with flexible notes, matching active/removed column starts. Presentation only, no legal changes.",
-  "digest": "8788bb448d529e677c5aa4ca1fc0d7c42ed3d3fbf03a68514125eef4c0867b0c"
+  "reviewedAt": "2026-11-15T22:32:23.860Z",
+  "note": "Reviewed user-facing merge/add terminology, ID example placeholder, no discard warning for add-existing modal, and shared dialog autofocus on useful editable fields. Identity operations and permissions unchanged; no legal updates.",
+  "digest": "e7714897109f5cf94030e2bea843139cab0683e6f7ce3b524fdfe48b1cd02ae1"
 }
