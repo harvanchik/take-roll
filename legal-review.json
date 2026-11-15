@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:38:41.169Z",
-  "note": "Reviewed shared overflow-only name/pronunciation marquee across roster, roll call, overview, mobile, person record, reports and previews; full-text tooltips and reduced-motion support. Compact roster columns allow notes to shrink before horizontal table overflow. Presentation only, no new processing or legal changes.",
-  "digest": "cbe89dacdf5ab877a5b68264503c5875c1810d0bac5a8f246ade8eb4ceae388f"
+  "reviewedAt": "2026-11-15T22:40:55.277Z",
+  "note": "Reviewed event-page Generate Report keyboard shortcut Ctrl/Cmd Shift R, scoped to event pages with no open dialog. Interaction-only change; no legal updates.",
+  "digest": "4274fe56cd9cb6dbdb011f0bccbc6db6fc13785f73e1edbadad97cbbd5362006"
 }
