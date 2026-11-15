@@ -5,11 +5,11 @@ export const REPORT_GROUPS=['Present','Bit Late','Tardy','Absent','Excused (work
 export type ReportGroup=Status|'Unmarked';
 export type ReportSettings={
  groups:ReportGroup[];scope:'all'|'visible';format:'text'|'markdown';sort:'roster'|'first'|'last';nameStyle:'full'|'preferred'|'given';
- header:boolean;eventDate:boolean;roster:boolean;generatedAt:boolean;eventNote:boolean;summary:boolean;percentages:boolean;names:boolean;notes:boolean;excuses:boolean;pronunciations:boolean;timestamps:boolean;history:boolean;eventHistory:boolean;removed:boolean;emptyGroups:boolean;numbering:boolean;
+ header:boolean;eventDate:boolean;roster:boolean;generatedAt:boolean;eventNote:boolean;summary:boolean;groupCounts:boolean;percentages:boolean;names:boolean;notes:boolean;excuses:boolean;pronunciations:boolean;timestamps:boolean;history:boolean;eventHistory:boolean;removed:boolean;emptyGroups:boolean;numbering:boolean;
  historyLimit:4|10|0;title:string;intro:string;footer:string;
 };
-export const DEFAULT_REPORT_SETTINGS:ReportSettings={groups:[...REPORT_GROUPS],scope:'all',format:'text',sort:'roster',nameStyle:'full',header:true,eventDate:true,roster:true,generatedAt:false,eventNote:true,summary:true,percentages:true,names:true,notes:true,excuses:true,pronunciations:false,timestamps:false,history:false,eventHistory:false,removed:false,emptyGroups:false,numbering:false,historyLimit:4,title:'',intro:'',footer:''};
-const FLAGS=['header','eventDate','roster','generatedAt','eventNote','summary','percentages','names','notes','excuses','pronunciations','timestamps','history','eventHistory','removed','emptyGroups','numbering'] as const;
+export const DEFAULT_REPORT_SETTINGS:ReportSettings={groups:[...REPORT_GROUPS],scope:'all',format:'text',sort:'roster',nameStyle:'full',header:true,eventDate:true,roster:true,generatedAt:false,eventNote:true,summary:true,groupCounts:true,percentages:true,names:true,notes:true,excuses:true,pronunciations:false,timestamps:false,history:false,eventHistory:false,removed:false,emptyGroups:false,numbering:false,historyLimit:4,title:'',intro:'',footer:''};
+const FLAGS=['header','eventDate','roster','generatedAt','eventNote','summary','groupCounts','percentages','names','notes','excuses','pronunciations','timestamps','history','eventHistory','removed','emptyGroups','numbering'] as const;
 export function reportSettings(input:unknown,config?:AttendanceSettings):ReportSettings {
  const settings=structuredClone(DEFAULT_REPORT_SETTINGS);
  if(config)settings.groups=[...attendanceChoices(config).map(s=>s.id),'Unmarked'];

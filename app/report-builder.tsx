@@ -13,14 +13,14 @@ import {defaultReportPresets,type ReportPreset,reportSettings,type ReportSetting
 import {generateReport,reportPeople} from '../lib/reports';
 const FLAGS:{key:keyof ReportSettings;label:string}[][]=[
  [{key:'header',label:'Title'},{key:'eventDate',label:'Event date'},{key:'roster',label:'Roster name'},{key:'generatedAt',label:'Generated date and time'},{key:'eventNote',label:'Event note'}],
- [{key:'summary',label:'Attendance totals'},{key:'percentages',label:'Status percentages'},{key:'emptyGroups',label:'Show empty status groups'},{key:'names',label:'Individual names'},{key:'numbering',label:'Number names in each group'}],
+ [{key:'summary',label:'Attendance totals'},{key:'groupCounts',label:'Show group counts'},{key:'percentages',label:'Status percentages'},{key:'emptyGroups',label:'Show empty status groups'},{key:'names',label:'Individual names'},{key:'numbering',label:'Number names in each group'}],
  [{key:'excuses',label:'Excuse reasons'},{key:'notes',label:'Individual notes'},{key:'pronunciations',label:'Name pronunciations'},{key:'timestamps',label:'Last-change timestamps'},{key:'history',label:'Individual change history'},{key:'eventHistory',label:'Event change history'}]
 ];
 export default function ReportBuilder({event:originalEvent,events=[],visibleIds:originalVisibleIds,initialSettings,onSave,presets,onPresetAction}:{event:Event;events?:Event[];visibleIds:string[];presets?:ReportPreset[];onPresetAction:(action:any)=>Promise<unknown>;initialSettings?:ReportSettings;onSave:(settings:ReportSettings,before?:ReportSettings)=>Promise<unknown>}){
  const [selectedSubevent,setSelectedSubevent]=useState(originalEvent.id);
  const combined=selectedSubevent==='all',selected=events.find(e=>e.id===selectedSubevent)||originalEvent;
  const baseName=originalEvent.name.endsWith(' · '+originalEvent.subeventName)?originalEvent.name.slice(0,-(' · '+originalEvent.subeventName).length):originalEvent.name;
- const event:Event=combined?{...originalEvent,name:baseName,subeventName:'',participants:events.flatMap(e=>e.participants.map(p=>({...p,id:e.id+':'+p.id}))),note:''}:{...selected,name:baseName,settings:originalEvent.settings,subeventName:events.length>1?(selected.subeventName||'Day 1'):''};
+ const event:Event=combined?{...originalEvent,name:baseName,subeventName:'',participants:events.flatMap(e=>e.participants.map(p=>({...p,id:e.id+':'+p.id}))),note:originalEvent.note}:{...selected,name:baseName,settings:originalEvent.settings,subeventName:events.length>1?(selected.subeventName||'Day 1'):''};
  const visibleIds=combined?events.flatMap(e=>e.participants.filter(p=>originalVisibleIds.includes(p.id)).map(p=>e.id+':'+p.id)):originalVisibleIds;
  const subeventLabels=combined?Object.fromEntries(events.flatMap(e=>e.participants.map(p=>[e.id+':'+p.id,e.subeventName||'Day 1']))):undefined;
  const subeventControl=events.length>1?<Select aria-label="Report Subevent" value={selectedSubevent} onValueChange={setSelectedSubevent}><option value="all">All Subevents</option>{events.map(e=><option key={e.id} value={e.id}>{e.subeventName||'Day 1'}</option>)}</Select>:null;

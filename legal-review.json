@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:40:55.277Z",
-  "note": "Reviewed event-page Generate Report keyboard shortcut Ctrl/Cmd Shift R, scoped to event pages with no open dialog. Interaction-only change; no legal updates.",
-  "digest": "4274fe56cd9cb6dbdb011f0bccbc6db6fc13785f73e1edbadad97cbbd5362006"
+  "reviewedAt": "2026-11-15T22:47:13.035Z",
+  "note": "Reviewed saved report group-count toggle, event note combined with roster/date metadata, and removal of combined explanation. Existing processing unchanged; no legal changes.",
+  "digest": "e8307e4c1e4b8b834aba8658faac1242903de4efd96adeceab372c82bcf1c9fa"
 }
