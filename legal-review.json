@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:47:13.035Z",
-  "note": "Reviewed saved report group-count toggle, event note combined with roster/date metadata, and removal of combined explanation. Existing processing unchanged; no legal changes.",
+  "reviewedAt": "2026-11-15T22:50:46.472Z",
+  "note": "Reviewed removal of legacy roster minimum widths so columns fit the viewport, reserve four action buttons, shrink notes and use existing pronunciation marquee. Presentation-only correction; no legal changes.",
   "digest": "e8307e4c1e4b8b834aba8658faac1242903de4efd96adeceab372c82bcf1c9fa"
 }
