@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T23:07:56.481Z",
-  "note": "Reviewed global Show Name Pronunciations display visibility including roster column removal, report output and blank missing values. Existing event override inheritance retained, no data deletion or legal changes.",
+  "reviewedAt": "2026-11-15T23:09:59.838Z",
+  "note": "Reviewed square hover corners on settings navigation tabs. CSS presentation only; no legal changes.",
   "digest": "7e7c69ff70b78548d6acedad65717d2c309ac2508082626d8c43673abe532e72"
 }
