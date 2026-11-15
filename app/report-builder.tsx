@@ -26,7 +26,7 @@ export default function ReportBuilder({event,visibleIds,initialSettings,onSave,p
  const draftKey=useId(),latest=useRef(initialSettings),baseline=useRef(initialSettings),latestConfig=useRef(config);latest.current=initialSettings;latestConfig.current=config;
  const announce=(dirty:boolean)=>window.dispatchEvent(new CustomEvent('attendance:text-dirty',{detail:{key:draftKey,dirty}}));
  const current=useRef(settings),save=useRef(onSave),dirty=useRef(false),timer=useRef<ReturnType<typeof setTimeout>|null>(null),generated=useRef(new Date().toISOString());save.current=onSave;
- const update=(patch:Partial<ReportSettings>)=>{setCopied(false);if(!dirty.current)baseline.current=latest.current;dirty.current=true;const next=reportSettings({...current.current,...patch},config);current.current=next;setSettings(next);announce(true);};
+ const update=(patch:Partial<ReportSettings>)=>{setCopied(false);if(!dirty.current)baseline.current=latest.current;dirty.current=true;const next=reportSettings({...current.current,...patch},config);current.current=next;setSettings(next);announce(false);};
  const saveNow=()=>{if(timer.current)clearTimeout(timer.current);if(dirty.current){dirty.current=false;void save.current(current.current,baseline.current);announce(false);}};
  useEffect(()=>{current.current=settings;if(!dirty.current)return;timer.current=setTimeout(saveNow,500);return ()=>{if(timer.current)clearTimeout(timer.current);};},[settings]);
  useEffect(()=>{if(!dirty.current){const next=reportSettings(initialSettings,config);current.current=next;setSettings(next);setCopied(false);}},[initialSettings,config]);

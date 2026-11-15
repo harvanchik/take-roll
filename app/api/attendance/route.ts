@@ -54,11 +54,11 @@ export async function POST(request:Request){
  if(body.accountId!==account.storeKey)return response({error:'Your Signed-In Account Changed. Reload Before Saving.'},403);
  const workspace=await resolveWorkspace(env.DB,account,body.workspaceId);
  if(!workspace){
-  if(!['update-profile','update-preferences'].includes(body.action.type))throw new RequestError('Choose A Workspace Before Saving.',403);
+  if(!['update-profile','update-preferences','report-settings'].includes(body.action.type))throw new RequestError('Choose A Workspace Before Saving.',403);
   const personal=await readPersonal(env.DB,account),current=presentWorkspace({rosters:[],events:[]},personal);
   if(typeof body.action.expected==='string'&&body.action.expected!==editFingerprint(current,body.action))return response({error:'These Settings Changed On Another Device.',code:'edit_conflict',data:current,revision:0},409);
   const changed=applyAction(current,body.action,new Date().toISOString(),{id:account.storeKey,name:account.name,email:account.email});
-  const field=body.action.type==='update-profile'?'profile':'preferences';
+  const field=body.action.type==='update-profile'?'profile':body.action.type==='report-settings'?'reportSettings':'preferences';
   if(!await savePersonal(env.DB,account,field,changed[field],personal))return response({error:'These Settings Changed On Another Device.',code:'edit_conflict',data:presentWorkspace(current,await readPersonal(env.DB,account)),revision:0},409);
   return response({data:presentWorkspace(current,await readPersonal(env.DB,account)),revision:0,savedAt:new Date().toISOString()});
  }
@@ -97,8 +97,8 @@ export async function POST(request:Request){
  const at=new Date().toISOString(),clicked=typeof body.occurredAt==='string'?Date.parse(body.occurredAt):NaN;
  const eventTime=Number.isFinite(clicked)&&clicked<=Date.now()+60000&&clicked>=Date.now()-7*86400000?new Date(clicked).toISOString():at;
  const changed=applyAction(current,body.action,eventTime,{id:account.storeKey,name:profileName(personal.profile,account.name),email:account.email});
- if(body.action.type==='update-profile'||body.action.type==='update-preferences'){
-  const field=body.action.type==='update-profile'?'profile':'preferences';const saved=await savePersonal(env.DB,account,field,changed[field],personal);if(!saved)return response({error:'These Settings Changed On Another Device. Review Your Draft Before Saving.',code:'edit_conflict',data:presentWorkspace(current,await readPersonal(env.DB,account)),revision:row.revision},409);
+ if(body.action.type==='update-profile'||body.action.type==='update-preferences'||body.action.type==='report-settings'){
+  const field=body.action.type==='update-profile'?'profile':body.action.type==='report-settings'?'reportSettings':'preferences';const saved=await savePersonal(env.DB,account,field,changed[field],personal);if(!saved)return response({error:'These Settings Changed On Another Device. Review Your Draft Before Saving.',code:'edit_conflict',data:presentWorkspace(current,await readPersonal(env.DB,account)),revision:row.revision},409);
   const nextPersonal=await readPersonal(env.DB,account);if(field==='profile'){for(const item of await listWorkspaces(env.DB,account)){await rememberHistoryActor(env.DB,item.id,account,profileName(nextPersonal.profile,account.name||account.email.toLowerCase()),true);notifyWorkspace(env.DB,item.id);}}
   const latest=await readCurrentStore(env.DB,workspace.id,accessPredicate(workspace,account));await assertAccess(env.DB,workspace,account);
   notifyWorkspace(env.DB,workspace.id);

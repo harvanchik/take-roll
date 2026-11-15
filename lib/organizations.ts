@@ -2,7 +2,7 @@ import type {AttendanceAccount} from './owner-access';
 import type {Data} from './model';
 import {RequestError} from './request-security';
 export type Workspace={id:string;admin:boolean;memberId?:string};
-type Personal=Pick<Data,'profile'|'preferences'|'personalRevision'>;
+type Personal=Pick<Data,'profile'|'preferences'|'reportSettings'|'personalRevision'>;
 export const normalizedEmail=(email:string)=>email.trim().toLowerCase();
 export function memberEmail(value:unknown){if(typeof value!=='string'||value.length>254||!/^[^\s@]{1,64}@[^\s@.]+(?:\.[^\s@.]+)+$/.test(value.trim()))throw new RequestError('Enter A Valid Email Address.');return normalizedEmail(value);}
 export type WorkspaceChoice={id:string;name:string;role:'admin'|'member'};
@@ -50,6 +50,6 @@ export async function readPersonal(db:D1Database,account:AttendanceAccount):Prom
  if(!row){const own=await db.prepare('SELECT data FROM attendance_stores WHERE user_id=?').bind(account.storeKey).first<{data:string}>();const data=own?JSON.parse(own.data):{};const personal={...(data.profile?{profile:data.profile}:{}),...(data.preferences?{preferences:data.preferences}:{})};await db.prepare('INSERT INTO account_settings (account_id,data) VALUES (?,?) ON CONFLICT(account_id) DO NOTHING').bind(account.storeKey,JSON.stringify(personal)).run();row=await db.prepare('SELECT data FROM account_settings WHERE account_id=?').bind(account.storeKey).first<{data:string}>();}
  return JSON.parse(row!.data);
 }
-export function sharedData(data:Data):Data{const {profile:_,preferences:__,personalRevision:___,...shared}=data;return shared;}
+export function sharedData(data:Data):Data{const {profile:_,preferences:__,personalRevision:___,reportSettings:____,...shared}=data;return shared;}
 export function presentWorkspace(data:Data,personal:Personal):Data{return {...sharedData(data),...personal};}
-export async function savePersonal(db:D1Database,account:AttendanceAccount,field:'profile'|'preferences',value:unknown,before?:Personal){const result=await db.prepare('UPDATE account_settings SET data=json_set(data,?,json(?),\'$.personalRevision\',COALESCE(json_extract(data,\'$.personalRevision\'),0)+1) WHERE account_id=?'+(before?' AND json_extract(data,?) IS json_extract(?,?)':'')).bind('$.'+field,JSON.stringify(value),account.storeKey,...(before?['$.'+field,JSON.stringify(before),'$.'+field]:[])).run();return !!result.meta.changes;}
+export async function savePersonal(db:D1Database,account:AttendanceAccount,field:'profile'|'preferences'|'reportSettings',value:unknown,before?:Personal){const result=await db.prepare('UPDATE account_settings SET data=json_set(data,?,json(?),\'$.personalRevision\',COALESCE(json_extract(data,\'$.personalRevision\'),0)+1) WHERE account_id=?'+(before?' AND json_extract(data,?) IS json_extract(?,?)':'')).bind('$.'+field,JSON.stringify(value),account.storeKey,...(before?['$.'+field,JSON.stringify(before),'$.'+field]:[])).run();return !!result.meta.changes;}

@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T21:16:48.056Z",
-  "note": "Reviewed report control simplification, reactive visual details, unified download, chart tooltips and removed explanatory UI. Export still contains user-selected existing report data; no changes to processing or legal terms.",
-  "digest": "364660cc4783ed470b4006a920dc37598ce9747b9f3e58d6245d51b983580922"
+  "reviewedAt": "2026-11-15T21:36:08.299Z",
+  "note": "Reviewed report autosave stored per authenticated account across events, title and hover fixes, and percentage defaults. No new data categories or providers; existing policy covers account preferences.",
+  "digest": "f3df4c4b3e931693eda83189b3f9ec9329420725b9231733138c941760ab4c87"
 }
