@@ -3,8 +3,8 @@ import {attendanceSettings,validateAttendance,type AttendanceSettings} from './a
 import {organizationSettings,validateOrganization,type OrganizationSettings} from './workspace-settings.ts';
 import type {Data,Event} from './model.ts';
 import {ValidationError} from './validation-error.ts';
-export type EventSettingsOverrides=Partial<Pick<OrganizationSettings,'nameDisplay'|'showPronunciation'|'forceAlphabetical'|'defaultSort'|'mobileSwipe'>> & {attendance?:Partial<AttendanceSettings>;useGlobal?:boolean;testOnly?:boolean};
-const keys=['nameDisplay','showPronunciation','forceAlphabetical','defaultSort','mobileSwipe'] as const;
+export type EventSettingsOverrides=Partial<Pick<OrganizationSettings,'nameDisplay'|'autoScrollNames'|'showPronunciation'|'forceAlphabetical'|'defaultSort'|'mobileSwipe'>> & {attendance?:Partial<AttendanceSettings>;useGlobal?:boolean;testOnly?:boolean};
+const keys=['nameDisplay','autoScrollNames','showPronunciation','forceAlphabetical','defaultSort','mobileSwipe'] as const;
 export function eventSettingsRoot(data:Pick<Data,'events'>,event:Event){return data.events.find(e=>e.id===(event.parentEventId||event.id))||event;}
 export function effectiveEventSettings(data:Pick<Data,'events'|'organization'>,event?:Event):OrganizationSettings{
  return mergeEventSettings(organizationSettings(data.organization),event?eventSettingsRoot(data,event).settings:undefined);
@@ -27,7 +27,7 @@ export function validateEventOverrides(input:unknown,global?:OrganizationSetting
  return out;
 }
 /** A local event owns every roll-call setting, including values equal to today's globals. */
-export function eventSettingsSnapshot(value:OrganizationSettings){const attendance=structuredClone(attendanceSettings(value));attendance.statuses=attendance.statuses.filter(s=>s.active);attendance.excuses=attendance.excuses.filter(e=>e.active);return {mobileSwipe:{left:value.mobileSwipe?.left??'',right:value.mobileSwipe?.right??''},nameDisplay:value.nameDisplay,showPronunciation:value.showPronunciation,defaultSort:defaultSort(value),attendance};}
+export function eventSettingsSnapshot(value:OrganizationSettings){const attendance=structuredClone(attendanceSettings(value));attendance.statuses=attendance.statuses.filter(s=>s.active);attendance.excuses=attendance.excuses.filter(e=>e.active);return {mobileSwipe:{left:value.mobileSwipe?.left??'',right:value.mobileSwipe?.right??''},nameDisplay:value.nameDisplay,showPronunciation:value.showPronunciation,autoScrollNames:value.autoScrollNames!==false,defaultSort:defaultSort(value),attendance};}
 export type EventSettingsDraft={useGlobal:boolean;testOnly:boolean;local:ReturnType<typeof eventSettingsSnapshot>};
 export function eventSettingsDraft(source:ReturnType<typeof eventSettingsSource>):EventSettingsDraft{
  return {useGlobal:source.overrides?.useGlobal??!Object.keys(source.overrides??{}).filter(k=>k!=='testOnly').length,testOnly:source.overrides?.testOnly===true,local:eventSettingsSnapshot(mergeEventSettings(source.global,{...source.overrides,useGlobal:false}))};

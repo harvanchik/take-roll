@@ -22,7 +22,7 @@ const readers=snapshots.map((snapshot,i)=>workspaceStream(globalThis.__settingsL
 const next=async reader=>{let text='';for(;;){const {value,done}=await reader.read();if(done)throw Error('Stream Ended');text+=new TextDecoder().decode(value);for(const line of text.split('\n'))if(line.startsWith('data: ')&&line.includes('revision'))return JSON.parse(line.slice(6));}};
 let data=await Promise.all(readers.map(next));
 const waits=readers.map(next),started=performance.now();
-const settings={useGlobal:false,nameDisplay:'preferred',showPronunciation:false,forceAlphabetical:true,attendance:{...DEFAULT_ATTENDANCE,comments:false,flags:false,history:false,eventNote:false,excuseTypes:false,flagColor:'teal',checkColor:'blue',excusedLabel:'Excused2',statuses:DEFAULT_ATTENDANCE.statuses.map(s=>({...s,color:'indigo'}))}};
+const settings={useGlobal:false,autoScrollNames:false,nameDisplay:'preferred',showPronunciation:false,forceAlphabetical:true,attendance:{...DEFAULT_ATTENDANCE,comments:false,flags:false,history:false,eventNote:false,excuseTypes:false,flagColor:'teal',checkColor:'blue',excusedLabel:'Excused2',statuses:DEFAULT_ATTENDANCE.statuses.map(s=>({...s,color:'indigo'}))}};
 const saved=await send('owner',snapshots[0],guardEdit(snapshots[0].data,{type:'update-event-settings',eventId:event.id,settings}),{compact:true,personalRevision:snapshots[0].data.personalRevision??0,mutationId:'compact-settings-save'});
 assert.equal(saved.status,200);const packet=await saved.json();assert.ok(packet.patch);assert.equal(packet.data,undefined);
 const acknowledged=expandSaveReply(packet,{data:snapshots[0].data,revision:snapshots[0].revision});

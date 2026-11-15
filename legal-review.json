@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:57:43.589Z",
-  "note": "Reviewed keeping full person tooltips visible during marquee scrolling, separate constrained roll-call name/pronunciation lines and readable pronunciation tooltip separators. Presentation-only fixes, no legal changes.",
-  "digest": "a850e6818da6609696eaf09f2f2cd29d790d39e48fa6413940d5f967a807e4cd"
+  "reviewedAt": "2026-11-15T23:03:31.517Z",
+  "note": "Reviewed global and event-local Auto Scroll Names on Overflow display setting, applying to names/pronunciations across app while full-text tooltips remain available. Stored in existing organization/event settings; no new data purposes or legal terms.",
+  "digest": "eb024fe40f1b6fc1e92ae99e951d609160016fb1c2a3a6b34de4c6295dc4861a"
 }
