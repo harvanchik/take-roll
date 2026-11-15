@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T21:36:08.299Z",
-  "note": "Reviewed report autosave stored per authenticated account across events, title and hover fixes, and percentage defaults. No new data categories or providers; existing policy covers account preferences.",
-  "digest": "f3df4c4b3e931693eda83189b3f9ec9329420725b9231733138c941760ab4c87"
+  "reviewedAt": "2026-11-15T21:49:32.362Z",
+  "note": "Reviewed workspace loading dot animation with fixed width and reduced-motion support. Presentation only, no legal changes.",
+  "digest": "21c2629fa603cec84c9d1fd00170124183c4afb7775fd42f6eedd4064556001a"
 }
