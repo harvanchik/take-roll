@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-14T11:30:21.492Z",
-  "note": "Reviewed event modal grid sizing and long roster label truncation. Presentation-only correction; no changes to data handling or legal terms.",
-  "digest": "cd6b7158d710e978f00d331a21efe73eba933df0c7b66aae590566e124a04024"
+  "reviewedAt": "2026-11-15T20:33:29.758Z",
+  "note": "Reviewed visual report summaries, filter-scoped charts and local HTML download of existing report data. No new providers, persistence, permissions or processing purposes; existing export policies remain accurate.",
+  "digest": "d88436d942881a90d28a34e3169f78a4c19c3e5033b3d047e81cf48792b766ff"
 }

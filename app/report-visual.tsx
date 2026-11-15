@@ -1,0 +1,13 @@
+'use client';
+import {excuseFor,type Event} from '../lib/model';
+import {choiceLabel,type AttendanceSettings} from '../lib/attendance-settings';
+import {reportPeople} from '../lib/reports';
+import type {ReportSettings} from '../lib/report-settings';
+import {statusStyle} from './attendance-style';
+
+export default function ReportVisual({event,settings,visibleIds,config}:{event:Event;settings:ReportSettings;visibleIds:string[];config:AttendanceSettings}){
+ const people=reportPeople(event,settings,visibleIds,config),marked=people.filter(p=>p.status),attended=marked.filter(p=>config.statuses.find(s=>s.id===p.status)?.attended),excused=people.filter(p=>excuseFor(p)),unmarked=people.length-marked.length;
+ const statuses=[...new Set([...config.statuses.map(s=>s.id),...marked.map(p=>p.status!)])].map(id=>({id,label:choiceLabel(id,config),count:people.filter(p=>p.status===id).length})).filter(s=>s.count);
+ if(unmarked)statuses.push({id:'Unmarked',label:'Unmarked',count:unmarked});
+ return <section className="report-visual" aria-label="Visual Attendance Summary"><div className="report-visual-title"><div><span className="eyebrow">ATTENDANCE REPORT</span><h3>{settings.title.trim()||event.name}</h3><p>{event.rosterName} · {new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(event.date+'T12:00:00Z'))}</p></div><strong>{marked.length?Math.round(attended.length/marked.length*100)+'%':'—'}<small>attendance rate</small></strong></div><div className="report-visual-metrics">{[['People',people.length],['Attended',attended.length],['Excused',excused.length],['Unmarked',unmarked]].map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div><p className="report-visual-help">Based on included people. Attendance rate excludes unmarked entries; excused can overlap attendance.</p><h4>Attendance Breakdown</h4>{!people.length?<p>No people match the selected options.</p>:<><div className="report-visual-stack" aria-label="Attendance distribution">{statuses.map(s=><span key={s.id} style={{...statusStyle(s.id,config),width:s.count/people.length*100+'%',background:s.id==='Unmarked'?'var(--gray)':'var(--tone)'}} title={`${s.label}: ${s.count}`}/>)}</div><div className="report-visual-bars">{statuses.map(s=><div key={s.id} style={statusStyle(s.id,config)}><span>{s.label}</span><div><i style={{width:s.count/people.length*100+'%',background:s.id==='Unmarked'?'var(--gray)':'var(--tone)'}}/></div><strong>{s.count} <small>{Math.round(s.count/people.length*100)}%</small></strong></div>)}</div></>}</section>;
+}
