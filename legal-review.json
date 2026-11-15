@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:53:09.319Z",
-  "note": "Reviewed smooth fast marquee return and naturally adjacent, stationary copyable IDs. Presentation only; no data or legal changes.",
-  "digest": "2f17be9106dbb457bf08e5ade36d674559f4ee5a367e9632fc33d7b0a75655f3"
+  "reviewedAt": "2026-11-15T22:57:43.589Z",
+  "note": "Reviewed keeping full person tooltips visible during marquee scrolling, separate constrained roll-call name/pronunciation lines and readable pronunciation tooltip separators. Presentation-only fixes, no legal changes.",
+  "digest": "a850e6818da6609696eaf09f2f2cd29d790d39e48fa6413940d5f967a807e4cd"
 }

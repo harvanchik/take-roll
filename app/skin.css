@@ -1715,3 +1715,6 @@ button.person-id{cursor:pointer}
 
 /* Let short names size naturally so IDs follow immediately, but shrink only the name. */
 .roster-name-line{display:flex;justify-content:flex-start;gap:6px;min-width:0}.roster-name-line>strong{flex:0 1 auto;min-width:0;max-width:100%}.roster-name-line>.person-id{flex:0 0 auto;margin-left:0}.roster-name-line .roster-person-link{max-width:100%}
+
+/* Constrain each roll-call text line, not the combined name/pronunciation link. */
+.attendance-identity{min-width:0;max-width:100%}.attendance-identity>.attendance-person-link{flex:1 1 0;width:0;min-width:0;max-width:100%;overflow:hidden}.attendance-person-link>strong,.attendance-person-link>.pronunciation{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box}.attendance-row .person-cell{min-width:0;overflow:hidden}
