@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T23:03:31.517Z",
-  "note": "Reviewed global and event-local Auto Scroll Names on Overflow display setting, applying to names/pronunciations across app while full-text tooltips remain available. Stored in existing organization/event settings; no new data purposes or legal terms.",
-  "digest": "eb024fe40f1b6fc1e92ae99e951d609160016fb1c2a3a6b34de4c6295dc4861a"
+  "reviewedAt": "2026-11-15T23:07:56.481Z",
+  "note": "Reviewed global Show Name Pronunciations display visibility including roster column removal, report output and blank missing values. Existing event override inheritance retained, no data deletion or legal changes.",
+  "digest": "7e7c69ff70b78548d6acedad65717d2c309ac2508082626d8c43673abe532e72"
 }
