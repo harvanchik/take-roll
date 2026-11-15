@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T20:33:29.758Z",
-  "note": "Reviewed visual report summaries, filter-scoped charts and local HTML download of existing report data. No new providers, persistence, permissions or processing purposes; existing export policies remain accurate.",
-  "digest": "d88436d942881a90d28a34e3169f78a4c19c3e5033b3d047e81cf48792b766ff"
+  "reviewedAt": "2026-11-15T21:16:48.056Z",
+  "note": "Reviewed report control simplification, reactive visual details, unified download, chart tooltips and removed explanatory UI. Export still contains user-selected existing report data; no changes to processing or legal terms.",
+  "digest": "364660cc4783ed470b4006a920dc37598ce9747b9f3e58d6245d51b983580922"
 }
