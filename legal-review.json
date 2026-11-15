@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T22:16:34.203Z",
-  "note": "Reviewed enabling existing reports within test events with explicit test-only labeling in visual and text exports. Test data remains excluded from official cross-event records and statistics. No changes to processing purposes or legal terms.",
-  "digest": "63c9c7fc6277ae1dec26d0515e630027c9664d7c6033cb13319bf29ab0544973"
+  "reviewedAt": "2026-11-15T22:25:40.856Z",
+  "note": "Reviewed visual report excuse subgroups with configured colors, counts and inline notes. Presentation-only grouping of existing report data; no legal changes.",
+  "digest": "8788bb448d529e677c5aa4ca1fc0d7c42ed3d3fbf03a68514125eef4c0867b0c"
 }
