@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T19:30:49.256Z",
-  "note": "Reviewed textarea overflow measurement and one-line note sizing. Scrollbars appear only for actual content overflow and adjust after focus, edits, fonts and resizing. No changes to note data, saving, collection, sharing, retention or accepted legal terms.",
-  "digest": "6a66f77c333dd08f13369d4dc5b0bdb793361013c1a07e39c8c13d1b2ed59729"
+  "reviewedAt": "2026-11-16T19:33:55.153Z",
+  "note": "Reviewed replacement of the roster Edit Person icon with a pencil only. No behavior, data processing, policy or accepted agreement changes.",
+  "digest": "6b1a1c8376e66f115b493ba1cc1d5c78645b4f3414110c1e7f2beaaf71a939be"
 }
