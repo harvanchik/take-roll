@@ -1744,3 +1744,5 @@ button.person-id{cursor:pointer}
 /* A 32px desktop note must fit one line including padding and borders. */
 @media(min-width:761px){.attendance-row .inline-person-note,.roster-record-page .inline-person-note{line-height:20px;padding-top:5px;padding-bottom:5px;box-sizing:border-box}}
 textarea{overflow-x:hidden}
+
+.pronunciation-audio{display:inline-flex!important;vertical-align:middle;align-items:center;justify-content:center;width:22px!important;height:22px!important;min-height:22px!important;padding:3px!important;margin-left:4px;flex:0 0 22px;transform:none}.pronunciation-audio:disabled{cursor:default}

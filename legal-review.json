@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T19:33:55.153Z",
-  "note": "Reviewed replacement of the roster Edit Person icon with a pencil only. No behavior, data processing, policy or accepted agreement changes.",
-  "digest": "6b1a1c8376e66f115b493ba1cc1d5c78645b4f3414110c1e7f2beaaf71a939be"
+  "reviewedAt": "2026-11-16T19:38:30.373Z",
+  "note": "Reviewed optional on-device pronunciation playback, localService-only voice selection, a single playback lock released on completion/error, and cancellation of stalled playback. No paid speech API, audio storage, microphone access or new server processing. Device processing notice explains local speech and device-dependent availability and accuracy; accepted agreements remain unchanged.",
+  "digest": "99376cb1e23ef7a34b77b4136cc38c2b4c203eb82cfb6fdedac93a7fffc227db"
 }
