@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T19:55:26.293Z",
-  "note": "Reviewed roll-call pronunciation layout only: audio control remains outside the scrolling text container. No playback, data, privacy, retention or agreement changes.",
-  "digest": "6e1602598a4380cecc9accf3010b3e6dba151c9ec24231dbe5c6b27ebdad3c04"
+  "reviewedAt": "2026-11-16T20:00:22.701Z",
+  "note": "Reviewed desktop attendance summary layout only: up to seven cards in a single horizontally scrolling row. Mobile layout and all data behavior unchanged; no legal document or agreement changes.",
+  "digest": "8b34935a6fa0318f7d675c059dcec7f01e9b54c2bc23c1a4fb055092d2ba8c9b"
 }
