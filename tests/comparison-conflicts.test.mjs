@@ -25,3 +25,24 @@ test('conflict review resolves one edit while preserving a separate pending chan
  await q.savePending();const conflicts=q.conflicts();assert.equal(conflicts.length,1);assert.equal(conflicts[0].mine.value,'Mine');assert.equal(conflicts[0].theirs.value,'Theirs');assert.equal(conflicts[0].theirsAt,'2026-11-15T12:00:00Z');
  q.resolveConflict(conflicts[0].id,false);await q.flush();assert.equal(q.data.events[0].participants[0].note,'Theirs');assert.equal(q.data.events[0].participants[1].note,'Separate edit');
 });
+
+test('undo Discard Mine restores the conflict and all discarded edits without reverting other people',async()=>{
+ let data=seedData();data=applyAction(data,{type:'create-event',rosterId:data.rosters[0].id,name:'Undo QA',date:'2026-11-16'});data={...data,preferences:{...data.preferences,autoSave:false}};
+ const e=data.events[0],a=e.participants[0],b=e.participants[1];const remote=applyAction(data,{type:'person-note',eventId:e.id,personId:a.id,note:'Theirs'});
+ const q=new AttendanceQueue(data,0,async()=>({status:409,code:'edit_conflict',data:remote,revision:1}),()=>{});
+ q.enqueue({type:'person-note',eventId:e.id,personId:a.id,note:'Mine'});q.enqueue({type:'person-note',eventId:e.id,personId:b.id,note:'Separate'});await q.savePending();q.discard();
+ assert.equal(await q.undoConflictDecision(),true);assert.equal(q.snapshot().conflict,true);assert.equal(q.snapshot().pending,2);assert.equal(q.data.events[0].participants[0].note,'Mine');assert.equal(q.data.events[0].participants[1].note,'Separate');assert.equal(q.acknowledged.data.events[0].participants[0].note,'Theirs');
+});
+test('undo saved Keep Mine restores the incoming value with a guarded write and reopens the decision',async()=>{
+ let data=seedData();data=applyAction(data,{type:'create-event',rosterId:data.rosters[0].id,name:'Undo QA',date:'2026-11-16'});const e=data.events[0],p=e.participants[0];let remote=applyAction(data,{type:'person-note',eventId:e.id,personId:p.id,note:'Theirs'}),revision=1,calls=0;
+ const q=new AttendanceQueue(data,0,async({action})=>{calls++;if(calls===1)return {status:409,code:'edit_conflict',data:remote,revision};remote=applyAction(remote,action);return {status:200,data:remote,revision:++revision};},()=>{});
+ q.enqueue({type:'person-note',eventId:e.id,personId:p.id,note:'Mine'});await q.flush();q.keepMine();await q.flush();assert.equal(remote.events[0].participants[0].note,'Mine');
+ assert.equal(await q.undoConflictDecision(),true);assert.equal(remote.events[0].participants[0].note,'Theirs');assert.equal(q.snapshot().conflict,true);assert.equal(q.conflicts()[0].mine.value,'Mine');assert.equal(q.conflicts()[0].theirs.value,'Theirs');q.discard();assert.equal(q.data.events[0].participants[0].note,'Theirs');
+});
+test('undo a Keep Mine decision does not overwrite a newer collaborator edit',async()=>{
+ let data=seedData();data=applyAction(data,{type:'create-event',rosterId:data.rosters[0].id,name:'Undo QA',date:'2026-11-16'});const e=data.events[0],p=e.participants[0];let remote=applyAction(data,{type:'person-note',eventId:e.id,personId:p.id,note:'Theirs'}),revision=1,calls=0;
+ const {editFingerprint}=await import('../lib/edit-conflicts.ts');
+ const q=new AttendanceQueue(data,0,async({action})=>{calls++;if(calls===1||action.expected!==editFingerprint(remote,action))return {status:409,code:'edit_conflict',data:remote,revision};remote=applyAction(remote,action);return {status:200,data:remote,revision:++revision};},()=>{});
+ q.enqueue({type:'person-note',eventId:e.id,personId:p.id,note:'Mine'});await q.flush();q.keepMine();await q.flush();remote=applyAction(remote,{type:'person-note',eventId:e.id,personId:p.id,note:'Newer collaborator edit'});revision++;q.setBase(remote,revision);
+ assert.equal(await q.undoConflictDecision(),true);assert.equal(remote.events[0].participants[0].note,'Newer collaborator edit');assert.equal(q.snapshot().conflict,true);assert.equal(q.conflicts()[0].theirs.value,'Newer collaborator edit');
+});

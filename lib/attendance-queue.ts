@@ -1,14 +1,14 @@
 import {usesRemovedChoice} from './attendance-actions';
 import {removedEdit,restoreForEdit} from './removed-edit';
 import {describeConflict} from './conflict-review';
-import {guardEdit,editFingerprint} from './edit-conflicts';
+import {guardEdit,editFingerprint,editTarget} from './edit-conflicts';
 import {profileName} from './workspace-settings';
 import {applyAction,excuseFor,type Data,type ChangeActor} from './model';
 export type Action=Record<string,any>;
 export type PendingChange={id:string;action:Action;at:string};
 export type SaveReply={data?:Data;revision?:number;savedAt?:string;undoToken?:string;error?:string;status:number;code?:string};
 export type HistoryMove={eventId:string;forward:Action;backward:Action};
-type Move=HistoryMove;
+type Move=HistoryMove & {recordedAt?:number};
 export type QueueSnapshot={data:Data;pending:number;pendingEventIds:string[];saving:boolean;error:string;conflict:boolean;savedAt:string;undoCounts:Record<string,number>;redoCounts:Record<string,number>};
 export const BACKGROUND_ACTIONS=new Set(['roster-person-note','set-family-memberships','set-person-field','delete-subevent','restore-subevent','remove-family-person','set-family-membership','rename-roster','rename-subevent','person-flag','clear-person-history','report-settings','reorder-roster','reorder-event','excuse','attendance-state','status','mark-remaining','set-statuses','person-note','event-note','rename-event','remove-event-person','restore-event-person']);
 export function attendanceMove(data:Data,action:Action):Move{
@@ -33,7 +33,24 @@ export function attendanceMove(data:Data,action:Action):Move{
  if(action.type==='remove-event-person'||action.type==='restore-event-person')return {eventId:event.id,forward:action,backward:{...action,type:person().removed?'remove-event-person':'restore-event-person'}};
  throw Error('This change cannot be undone.');
 }
+/** Reverse only the changed fields; never restore an entire workspace snapshot. */
+export function conflictReverseAction(data:Data,action:Action):Action|undefined{
+ const e=data.events.find(e=>e.id===action.eventId),r=data.rosters.find(r=>r.id===action.rosterId);
+ switch(action.type){
+ case 'update-profile':return {type:action.type,profile:data.profile};
+ case 'update-preferences':return {type:action.type,preferences:data.preferences};
+ case 'update-organization':return {type:action.type,organization:data.organization};
+ case 'report-settings':return {type:action.type,settings:data.reportSettings};
+ case 'update-event-settings':return e?{type:action.type,eventId:e.id,settings:e.settings||{useGlobal:true}}:undefined;
+ case 'rename-roster':return r?{type:action.type,rosterId:r.id,name:r.name}:undefined;
+ case 'rename-subevent':return e?{type:action.type,eventId:e.id,name:e.subeventName||'Day 1'}:undefined;
+ case 'roster-person-note':return r?{...action,note:(editTarget(data,action) as {value:string}).value}:undefined;
+ default:try{return attendanceMove(data,action).backward;}catch{return undefined;}
+ }
+}
+type ConflictDecision={at:number;changes:PendingChange[];index:number;keptId?:string;reverse?:Action;moves:Move[]};
 export class AttendanceQueue{
+ private decisions:ConflictDecision[]=[];private undoingDecision=false;
  private base:Data;private revision:number;private pending:PendingChange[]=[];private working=false;private paused=false;private error='';private conflict=false;private savedAt='';private view:Data;
  private autoSaving=true;private approved=new Set<string>();
  private undoMoves:Move[]=[];private redoMoves:Move[]=[];private waiters:Array<(value:boolean)=>void>=[];
@@ -57,7 +74,7 @@ export class AttendanceQueue{
  }
  private matches(move:Move,eventId:string){return move.eventId===eventId||move.forward.type==='delete-subevent'&&(this.view.events.find(e=>e.id===eventId)?.parentEventId||eventId)===move.eventId;}
  private rebuild(){if(this.actor)this.actor={...this.actor,name:profileName(this.base.profile,this.actor.name||this.actor.email)};let data=this.base;for(const change of this.pending){if(data.appliedMutationIds?.includes(change.id))continue;try{data=applyAction(data,change.action,change.at,this.actor);}catch{this.paused=true;if(removedEdit(this.base,change.action)){this.conflict=true;this.error="This Person Was Removed. Keep My Change Restores Them And Saves Your Edit.";}else if(this.base.events.some(e=>e.id===change.action.eventId&&e.archivedAt))this.error="This Event Was Archived. Restore It Before Retrying, Or Discard The Waiting Change.";else this.error=usesRemovedChoice(this.base,change.action)?"An Attendance Choice Was Permanently Removed. Discard The Waiting Change To Continue.":"This Event Or Person No Longer Exists. Discard The Waiting Change To Continue.";}}this.view=data;}
- private append(action:Action,move?:Move){action=guardEdit(this.view,action);const change={id:crypto.randomUUID(),action,at:new Date().toISOString()},data=applyAction(this.view,action,change.at,this.actor);if(move){const backward={...move.backward};delete backward.expected;delete backward.before;this.undoMoves.push({...move,forward:action,backward:guardEdit(data,backward)});this.redoMoves=this.redoMoves.filter(m=>m.eventId!==move.eventId&&!(m.forward.type==='delete-subevent'&&m.forward.eventId===move.eventId));}this.pending.push(change);this.view=data;this.emit();void this.pump();}
+ private append(action:Action,move?:Move){action=guardEdit(this.view,action);const change={id:crypto.randomUUID(),action,at:new Date().toISOString()},data=applyAction(this.view,action,change.at,this.actor);if(move){const backward={...move.backward};delete backward.expected;delete backward.before;this.undoMoves.push({...move,recordedAt:performance.now(),forward:action,backward:guardEdit(data,backward)});this.redoMoves=this.redoMoves.filter(m=>m.eventId!==move.eventId&&!(m.forward.type==='delete-subevent'&&m.forward.eventId===move.eventId));}this.pending.push(change);this.view=data;this.emit();void this.pump();}
  enqueue(action:Action):Data{
   // A manual note draft can settle more than once before Save. Keep one final
   // note operation, its original conflict guard, and one undo step.
@@ -77,11 +94,28 @@ export class AttendanceQueue{
   let confirmed=false;
   if(!this.working){const ids=new Set(this.base.appliedMutationIds),first=this.pending[0];confirmed=!!first&&ids.has(first.id);this.pending=this.pending.filter(p=>{if(!ids.has(p.id))return true;this.approved.delete(p.id);return false;});if(confirmed){this.paused=this.conflict=false;this.error='';this.savedAt=new Date().toISOString();}}
   this.rebuild();this.emit();if(confirmed||this.autoSaving&&!wasAuto)void this.pump();}
+ get lastAttendanceUndoAt(){return Math.max(0,...this.undoMoves.map(move=>move.recordedAt??0));}
+ get lastConflictDecisionAt(){return this.decisions.at(-1)?.at??0;}
+ async undoConflictDecision(){
+  if(this.undoingDecision||!this.decisions.length)return false;this.undoingDecision=true;this.paused=true;
+  try{if(this.working)await new Promise<boolean>(resolve=>this.waiters.push(resolve));const decision=this.decisions.at(-1)!;
+   if(decision.keptId&&!this.pending.some(p=>p.id===decision.keptId)&&decision.reverse){
+    // A saved Keep Mine needs a guarded compensating write. Newer collaborator edits win.
+    this.working=true;const mutationId=crypto.randomUUID(),at=new Date().toISOString();let reply:SaveReply;
+    try{reply=await this.transport({revision:this.revision,action:decision.reverse,mutationId,occurredAt:at});for(let retry=0;reply.status===409&&reply.code!=='edit_conflict'&&reply.data&&reply.revision!==undefined&&retry<3;retry++){this.acceptBase(reply.data,reply.revision);reply=await this.transport({revision:this.revision,action:decision.reverse,mutationId,occurredAt:at});}
+     if(reply.data&&reply.revision!==undefined)this.acceptBase(reply.data,reply.revision);
+     if(reply.status!==200&&reply.code!=='edit_conflict')throw Error(reply.error||'Could not reopen this conflict. Try undo again.');
+    }finally{this.working=false;}
+   }
+   this.decisions.pop();for(const [offset,change] of decision.changes.entries()){this.pending=this.pending.filter(p=>p.id!==change.id);const restored={...structuredClone(change),id:crypto.randomUUID()};this.pending.splice(Math.min(decision.index+offset,this.pending.length),0,restored);}
+   this.undoMoves.push(...decision.moves);this.conflict=true;this.paused=true;this.error='Conflict reopened. Choose Keep Mine or Discard Mine.';this.rebuild();this.emit();return true;
+  }catch(error){this.error=error instanceof Error?error.message:'Could not reopen this conflict.';this.emit();return false;}finally{this.undoingDecision=false;}
+ }
  conflicts(){let baseline=this.base;const items=[];for(const pending of this.pending){if((pending.action.expected!==editFingerprint(baseline,pending.action))||(this.conflict&&pending===this.pending[0]))items.push(describeConflict(baseline,pending.action,pending.id,pending.at));try{baseline=applyAction(baseline,pending.action,pending.at,this.actor);}catch{}}return items;}
- resolveConflict(id:string,mine:boolean){if(this.working)return;const index=this.pending.findIndex(p=>p.id===id);if(index<0)return;const pending=this.pending[index];if(mine){let baseline=this.base;for(const previous of this.pending.slice(0,index))try{baseline=applyAction(baseline,previous.action,previous.at,this.actor);}catch{}const action={...pending.action};delete action.expected;delete action.before;pending.action=guardEdit(baseline,restoreForEdit(baseline,action));pending.at=new Date().toISOString();}else{this.pending.splice(index,1);this.approved.delete(id);this.undoMoves=this.undoMoves.filter(m=>m.forward!==pending.action&&m.forward.expected!==pending.action.expected);this.redoMoves=[];}this.conflict=false;const remaining=this.conflicts();this.conflict=remaining.length>0;this.paused=this.conflict;this.error=this.conflict?'Review the remaining conflicting changes.':'';this.rebuild();this.emit();if(!this.conflict)this.retry();}
- keepMine(){if(!this.conflict||this.working||!this.pending.length)return;const action={...this.pending[0].action};delete action.expected;delete action.before;if(action.type==='delete-subevent')delete action.undoToken;this.pending[0].action=guardEdit(this.base,restoreForEdit(this.base,action));this.pending[0].at=new Date().toISOString();this.conflict=false;this.retry();}
+ resolveConflict(id:string,mine:boolean){if(this.working)return;const index=this.pending.findIndex(p=>p.id===id);if(index<0)return;const pending=this.pending[index];const original=structuredClone(pending),reverse=mine?conflictReverseAction(this.base,pending.action):undefined;if(reverse){delete reverse.expected;delete reverse.before;}const decision:ConflictDecision={at:performance.now(),changes:[original],index,keptId:mine?pending.id:undefined,reverse:reverse?guardEdit(applyAction(this.base,restoreForEdit(this.base,pending.action),pending.at,this.actor),reverse):undefined,moves:[]};this.decisions.push(decision);if(mine){let baseline=this.base;for(const previous of this.pending.slice(0,index))try{baseline=applyAction(baseline,previous.action,previous.at,this.actor);}catch{}const action={...pending.action};delete action.expected;delete action.before;if(action.type==='delete-subevent')delete action.undoToken;pending.action=guardEdit(baseline,restoreForEdit(baseline,action));pending.at=new Date().toISOString();}else{this.pending.splice(index,1);this.approved.delete(id);decision.moves=this.undoMoves.filter(m=>m.forward===pending.action||m.forward.expected===pending.action.expected);this.undoMoves=this.undoMoves.filter(m=>m.forward!==pending.action&&m.forward.expected!==pending.action.expected);this.redoMoves=[];}this.conflict=false;const remaining=this.conflicts();this.conflict=remaining.length>0;this.paused=this.conflict;this.error=this.conflict?'Review the remaining conflicting changes.':'';this.rebuild();this.emit();if(!this.conflict)this.retry();}
+ keepMine(){if(this.conflict&&!this.working&&this.pending.length)this.resolveConflict(this.pending[0].id,true);}
  retry(){if(this.conflict)return;this.pending.forEach(p=>this.approved.add(p.id));this.error='';this.paused=false;this.emit();void this.pump();}
- discard(){if(this.working)return;this.pending=[];this.approved.clear();this.conflict=false;this.paused=false;this.error='';this.undoMoves=[];this.redoMoves=[];this.rebuild();this.emit();this.waiters.splice(0).forEach(resolve=>resolve(true));}
+ discard(){if(this.working)return;if(this.conflict&&this.pending.length)this.decisions.push({at:Date.now(),changes:structuredClone(this.pending),index:0,moves:structuredClone(this.undoMoves)});this.pending=[];this.approved.clear();this.conflict=false;this.paused=false;this.error='';this.undoMoves=[];this.redoMoves=[];this.rebuild();this.emit();this.waiters.splice(0).forEach(resolve=>resolve(true));}
  savePending():Promise<boolean>{if(this.conflict)return Promise.resolve(false);this.pending.forEach(p=>this.approved.add(p.id));this.paused=false;this.error='';void this.pump();return this.flush();}
  flush():Promise<boolean>{if(!this.autoSaving&&this.pending.some(p=>!this.approved.has(p.id)))return Promise.resolve(false);if(this.paused)return Promise.resolve(false);if(!this.pending.length&&!this.working)return Promise.resolve(true);return new Promise(resolve=>this.waiters.push(resolve));}
  private async pump(){if(this.working||this.paused||!this.pending.length||!this.autoSaving&&!this.approved.has(this.pending[0].id))return;this.working=true;this.emit();let conflicts=0;

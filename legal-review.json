@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T04:37:06.805Z",
-  "note": "Reviewed comparison and person-record URL filters, with filters excluded from remembered last-page bookmarks. Privacy and Cookies explain shared URL identifiers, filters and search text, with workspace access unchanged. Reviewed conflict review, custom validation, and scrolling display containers; notes remain within standard table cells. No new providers, public data access, or material Terms/EULA or DPA change; existing records and acceptance evidence preserved.",
-  "digest": "def527178f0855741b5c83cb1b23752b2722c6def83287adaa3e1657180f04c3"
+  "reviewedAt": "2026-11-16T15:36:06.336Z",
+  "note": "Reviewed session-only conflict-decision undo and guarded compensating writes, including stale collaborator edits and subevent recovery guards. Reviewed one-row error toasts and narrower sidebar context menus. No new collection, providers, sharing, retention, or material agreement changes. Audit entries remain saved; legal documents and accepted versions stay unchanged.",
+  "digest": "ad77e954d966d034078a23fa75d956854d67237f6932ca70e05ab2528f5a7758"
 }

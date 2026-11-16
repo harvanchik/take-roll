@@ -1723,3 +1723,14 @@ button.person-id{cursor:pointer}
 .app-shell[data-show-pronunciations=false] .roster-pronunciations,.app-shell[data-show-pronunciations=false] .pronunciation,.app-shell[data-show-pronunciations=false] .csv-preview-row>span:nth-child(2){display:none!important}.app-shell[data-show-pronunciations=false] .roster-record-page .roster-table-head>.sort-heading:nth-child(3),.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-table-head>span:nth-child(3){display:none}.app-shell[data-show-pronunciations=false] .roster-record-page .roster-table-head,.app-shell[data-show-pronunciations=false] .roster-record-page .roster-person-main{grid-template-columns:24px minmax(0,1.1fr) repeat(5,minmax(0,.45fr)) minmax(0,1.2fr) 120px}.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-person-note,.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-table-head>span:nth-child(9),.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-removed-date,.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-table-head>span:nth-child(10){grid-column:8}.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-person-actions,.app-shell[data-show-pronunciations=false] .roster-record-page .removed-roster-table .roster-table-head>span:nth-child(11){grid-column:9}
 
 .app-shell .settings-tabs .settings-tab,.app-shell .settings-tabs .settings-tab:hover,.app-shell .settings-tabs .settings-tab:focus-visible{border-radius:0!important}
+
+/* Sidebar events have their own portal menu, separate from card menus. */
+.recent-event-menu{width:160px;padding:5px;gap:4px}
+.recent-event-menu button{padding:6px 8px;min-width:0;white-space:nowrap}
+.save-dock.save-error{width:max-content;max-width:calc(100vw - 32px);flex-wrap:nowrap;gap:8px;overflow-x:auto;white-space:nowrap}
+.save-dock.save-error>*+*{margin-left:0}
+.save-dock.save-error>.status-dot,.save-dock.save-error>button{flex-shrink:0}
+.save-dock.save-error>span:not(.status-dot){display:flex;align-items:center;gap:7px;min-width:0;flex:1 1 auto;overflow:hidden}
+.save-dock.save-error strong,.save-dock.save-error small{display:inline;white-space:nowrap;max-width:none;font-size:10px;line-height:1.4}
+.save-dock.save-error small{overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media(max-width:760px){.save-dock.save-error{max-width:calc(100vw - 20px)}.save-dock.save-error strong{display:none}.save-dock.save-error .small{padding:4px 5px;font-size:9px}.save-dock.save-error{gap:5px}}
