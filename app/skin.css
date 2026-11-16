@@ -1735,3 +1735,9 @@ button.person-id{cursor:pointer}
 .save-dock.save-error small{overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media(max-width:760px){.save-dock.save-error{max-width:calc(100vw - 20px)}.save-dock.save-error strong{display:none}.save-dock.save-error .small{padding:4px 5px;font-size:9px}.save-dock.save-error{gap:5px}}
 .expanded-note-input{position:relative;min-width:0;width:100%}.expanded-note-input>.inline-person-note{padding-right:32px!important}.expanded-note-input>.expand-note{position:absolute;right:3px;top:50%;transform:translateY(-50%);width:26px;height:26px;padding:4px}.expanded-note-editor{display:block;width:100%;min-height:280px;max-height:60vh;resize:vertical;line-height:1.6}.expanded-note-modal{width:min(620px,calc(100vw - 32px))}
+/* Use the textarea's grid area to center the expand control exactly. */
+.expanded-note-input{display:grid;align-items:center}
+.expanded-note-input>.inline-person-note{grid-area:1/1;display:block;margin:0}
+.expanded-note-input>.expand-note{grid-area:1/1;position:relative;top:auto;right:auto;transform:none;justify-self:end;align-self:center;margin:0 3px 0 0;width:26px;height:26px;min-height:26px}
+.app-modal.expanded-note-modal{width:min(775px,calc(100vw - 32px))}
+.app-modal.expanded-note-modal .expanded-note-editor{height:140px;min-height:70px;max-height:70vh;resize:vertical;box-sizing:border-box}
