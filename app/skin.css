@@ -1755,3 +1755,12 @@ textarea{overflow-x:hidden}
 .stats-grid.custom-stats{grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:minmax(145px,calc((100% - var(--stat-gaps))/var(--stat-columns)));gap:9px;overflow-x:auto;overflow-y:hidden;min-width:0;max-width:100%;padding-bottom:4px}
 .settings-attendance-preview .stats-grid.custom-stats{grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(145px,1fr))!important;grid-auto-columns:auto;overflow:visible}
 }
+/* Mobile keeps its existing grid; only desktop gets a scrollable status group. */
+.status-stat-scroll{display:contents}
+@media(min-width:761px){
+.stats-grid.custom-stats.pinned-summary{grid-template-columns:repeat(var(--summary-columns),minmax(0,1fr))!important;grid-auto-flow:row;grid-auto-columns:auto;overflow:visible;padding-bottom:0;min-width:0;width:100%;gap:9px}
+.pinned-summary>.status-stat-scroll{display:grid;grid-column:1 / span var(--visible-statuses);grid-row:1;grid-auto-flow:column;grid-auto-columns:calc((100% - var(--status-gaps))/var(--visible-statuses));grid-template-rows:minmax(0,1fr);gap:9px;min-width:0;width:100%;overflow-x:auto;overflow-y:hidden;align-items:stretch;overscroll-behavior-x:contain}
+.pinned-summary>.stat{grid-row:1;min-width:0}
+.pinned-summary .stat>span,.pinned-summary .stat>strong{align-self:start!important;margin-top:0!important}
+.pinned-summary .stat{align-content:stretch;min-width:0}
+}

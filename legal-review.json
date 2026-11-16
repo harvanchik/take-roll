@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T20:00:22.701Z",
-  "note": "Reviewed desktop attendance summary layout only: up to seven cards in a single horizontally scrolling row. Mobile layout and all data behavior unchanged; no legal document or agreement changes.",
-  "digest": "8b34935a6fa0318f7d675c059dcec7f01e9b54c2bc23c1a4fb055092d2ba8c9b"
+  "reviewedAt": "2026-11-16T20:09:39.590Z",
+  "note": "Reviewed desktop attendance stat layout and mouse-wheel scrolling. Presentation only; no data handling or legal terms changes.",
+  "digest": "e2185420669058eb8bae6ee617bd1c618e9d0da7132af4a0768dbe6bf2024139"
 }
