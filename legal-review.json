@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-15T23:09:59.838Z",
-  "note": "Reviewed square hover corners on settings navigation tabs. CSS presentation only; no legal changes.",
-  "digest": "7e7c69ff70b78548d6acedad65717d2c309ac2508082626d8c43673abe532e72"
+  "reviewedAt": "2026-11-16T04:28:58.967Z",
+  "note": "Reviewed comparison and person-record URL filters, workspace-gated shared links, conflict review, custom validation, and display updates. Privacy and Cookies now explain URL-held person identifiers and filters, search-text sharing, and that access remains workspace-gated. No new providers or public access; existing attendance and acceptance evidence preserved. No material Terms/EULA or DPA change.",
+  "digest": "6e3fc1efc9549b84e02624fceef40191e679413a997de1be38f08fa6bd0ac9ae"
 }

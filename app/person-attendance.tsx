@@ -1,5 +1,6 @@
 'use client';
 import {useDisplayDates,usePersonalPreferences,useRememberedView} from './personal-preferences';
+import useAttendanceFilters from './use-attendance-filters';
 import {useMemo,useState,type MouseEvent} from 'react';
 import {ArrowUpRight,Search} from 'lucide-react';
 import {personAttendance,filterPersonAttendance,personAttendanceTotals,personRosterMemberships,personAttendanceSortValue,type PersonAttendanceRow} from '../lib/person-attendance';
@@ -22,7 +23,7 @@ import ViewOnlyFollowup from './view-only-followup';
 export default function PersonAttendance({data,uid,workspaceId,onNavigate}:{data:Data;uid:string;workspaceId?:string;onNavigate:(path:string)=>void}){
  const {displayName,displayPronunciation}=useNamePreferences(),person=personForUid(data,uid),personal=usePersonalPreferences();
  const rows=useMemo(()=>person?personAttendance(data,person.id):[],[data,person?.id]);
- const [filters,setFilters]=useRememberedView('person:'+uid,{from:'',to:'',roster:[] as string[],status:[] as string[],excuse:[] as string[],search:''}),[historyId,setHistoryId]=useState('');
+ const [filters,setFilters]=useAttendanceFilters(),[historyId,setHistoryId]=useState('');
  const {from,to,roster,status,excuse,search}=filters;
  const setFrom=(from:string)=>setFilters(value=>({...value,from})),setTo=(to:string)=>setFilters(value=>({...value,to})),setRoster=(roster:string[])=>setFilters(value=>({...value,roster})),setStatus=(status:string[])=>setFilters(value=>({...value,status})),setExcuse=(excuse:string[])=>setFilters(value=>({...value,excuse})),setSearch=(search:string)=>setFilters(value=>({...value,search}));
  const {sort,toggle}=useTableSort({key:'Date',direction:'desc'},uid);

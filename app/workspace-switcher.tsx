@@ -10,7 +10,7 @@ import type {WorkspaceChoice} from '../lib/organizations';
 type Payload={workspaces:WorkspaceChoice[];workspaceId?:string;members?:Member[];error?:string};
 type Member={id:string;email:string;joined:boolean};
 type Choice={workspace:WorkspaceChoice;kind:'leave'|'delete'|'transfer'};
-export const workspacePath=(path:string,id?:string)=>id==='browser-guest'?guestPath(path):path+(id?'?workspace='+encodeURIComponent(id):'');
+export const workspacePath=(path:string,id?:string)=>id==='browser-guest'?guestPath(path):path+(id?(path.includes('?')?'&':'?')+'workspace='+encodeURIComponent(id):'');
 export default function WorkspaceSwitcher({account,busy,ready,currentName,onOpen=(path:string)=>window.location.assign(path)}:{onOpen?:(path:string)=>void;account:SettingsAccount;busy:boolean;ready:()=>boolean;currentName?:string}){
  const [workspaces,setWorkspaces]=useState(account.workspaces||[]),[name,setName]=useState(''),[working,setWorking]=useState(false),[error,setError]=useState('');
  const [choice,setChoice]=useState<Choice|null>(null),[members,setMembers]=useState<Member[]>([]),[memberId,setMemberId]=useState(''),[confirmation,setConfirmation]=useState('');

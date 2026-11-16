@@ -1,6 +1,7 @@
 import {usesRemovedChoice} from './attendance-actions';
 import {removedEdit,restoreForEdit} from './removed-edit';
-import {guardEdit} from './edit-conflicts';
+import {describeConflict} from './conflict-review';
+import {guardEdit,editFingerprint} from './edit-conflicts';
 import {profileName} from './workspace-settings';
 import {applyAction,excuseFor,type Data,type ChangeActor} from './model';
 export type Action=Record<string,any>;
@@ -76,6 +77,8 @@ export class AttendanceQueue{
   let confirmed=false;
   if(!this.working){const ids=new Set(this.base.appliedMutationIds),first=this.pending[0];confirmed=!!first&&ids.has(first.id);this.pending=this.pending.filter(p=>{if(!ids.has(p.id))return true;this.approved.delete(p.id);return false;});if(confirmed){this.paused=this.conflict=false;this.error='';this.savedAt=new Date().toISOString();}}
   this.rebuild();this.emit();if(confirmed||this.autoSaving&&!wasAuto)void this.pump();}
+ conflicts(){let baseline=this.base;const items=[];for(const pending of this.pending){if((pending.action.expected!==editFingerprint(baseline,pending.action))||(this.conflict&&pending===this.pending[0]))items.push(describeConflict(baseline,pending.action,pending.id,pending.at));try{baseline=applyAction(baseline,pending.action,pending.at,this.actor);}catch{}}return items;}
+ resolveConflict(id:string,mine:boolean){if(this.working)return;const index=this.pending.findIndex(p=>p.id===id);if(index<0)return;const pending=this.pending[index];if(mine){let baseline=this.base;for(const previous of this.pending.slice(0,index))try{baseline=applyAction(baseline,previous.action,previous.at,this.actor);}catch{}const action={...pending.action};delete action.expected;delete action.before;pending.action=guardEdit(baseline,restoreForEdit(baseline,action));pending.at=new Date().toISOString();}else{this.pending.splice(index,1);this.approved.delete(id);this.undoMoves=this.undoMoves.filter(m=>m.forward!==pending.action&&m.forward.expected!==pending.action.expected);this.redoMoves=[];}this.conflict=false;const remaining=this.conflicts();this.conflict=remaining.length>0;this.paused=this.conflict;this.error=this.conflict?'Review the remaining conflicting changes.':'';this.rebuild();this.emit();if(!this.conflict)this.retry();}
  keepMine(){if(!this.conflict||this.working||!this.pending.length)return;const action={...this.pending[0].action};delete action.expected;delete action.before;if(action.type==='delete-subevent')delete action.undoToken;this.pending[0].action=guardEdit(this.base,restoreForEdit(this.base,action));this.pending[0].at=new Date().toISOString();this.conflict=false;this.retry();}
  retry(){if(this.conflict)return;this.pending.forEach(p=>this.approved.add(p.id));this.error='';this.paused=false;this.emit();void this.pump();}
  discard(){if(this.working)return;this.pending=[];this.approved.clear();this.conflict=false;this.paused=false;this.error='';this.undoMoves=[];this.redoMoves=[];this.rebuild();this.emit();this.waiters.splice(0).forEach(resolve=>resolve(true));}

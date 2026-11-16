@@ -4,7 +4,7 @@ export function safeSignInReturn(value:string){
  if(value.length>2048||/[\\\u0000-\u0020\u007f]/.test(value)||!value.startsWith('/')||value.startsWith('//'))return '/events';
  try{
   const url=new URL(value,'https://app.local');
-  if(!/^\/(?:$|events\/?$|rosters\/?$|archive\/?$|settings\/?$|event-settings\/[^/]+\/?$|event\/[^/]+(?:\/[^/]+)?\/?$|roster\/[^/]+\/?$|person\/[A-Za-z0-9]{7}\/?$)/.test(url.pathname)||url.origin!=='https://app.local'||/^\/(auth|signin-with-chatgpt|signout-with-chatgpt|callback)(\/|$)/.test(url.pathname))return '/events';
+  if(!/^\/(?:$|events\/?$|rosters\/?$|compare\/?$|archive\/?$|settings\/?$|event-settings\/[^/]+\/?$|event\/[^/]+(?:\/[^/]+)?\/?$|roster\/[^/]+\/?$|person\/[A-Za-z0-9]{7}\/?$)/.test(url.pathname)||url.origin!=='https://app.local'||/^\/(auth|signin-with-chatgpt|signout-with-chatgpt|callback)(\/|$)/.test(url.pathname))return '/events';
   return url.pathname+url.search+url.hash;
  }catch{return '/events';}
 }

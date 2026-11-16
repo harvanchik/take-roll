@@ -18,11 +18,12 @@ export function withSlugs(data:Data):Data {
  for(const e of events){const root=e.parentEventId||e.id;if(!used.has(root))used.set(root,new Set());if(e.subeventSlug)used.get(root)!.add(e.subeventSlug);}
  return {...data,events:events.map(e=>{if(e.subeventSlug)return e;const root=e.parentEventId||e.id;const taken=used.get(root)!;const base=slugify(e.subeventName||'Day 1');let slug=base,n=2;while(taken.has(slug))slug=base+'-'+n++;taken.add(slug);return {...e,subeventSlug:slug};}),rosters:normalize(data.rosters,'roster')};
 }
-export type PageRoute={view:'events'|'rosters'|'archive'|'settings'|'event-settings'|'person';personUid?:string;eventId:string;rosterId:string;missing:boolean};
+export type PageRoute={view:'events'|'rosters'|'archive'|'settings'|'event-settings'|'person'|'compare';personUid?:string;eventId:string;rosterId:string;missing:boolean};
 export function resolvePage(data:Data,path:string,now=new Date()):PageRoute {
  const route:PageRoute={view:'events',eventId:'',rosterId:data.rosters[0]?.id||'',missing:false};
- const clean=path.replace(/\/+$/,'')||'/';
+ const clean=path.split('?')[0].replace(/\/+$/,'')||'/';
  if(clean==='/'||clean==='/events')return route;
+ if(clean==='/compare')return {...route,view:'compare'};
  if(clean==='/settings')return {...route,view:'settings'};
  if(clean==='/archive')return {...route,view:'archive'};
  if(clean==='/rosters')return {...route,view:'rosters'};
