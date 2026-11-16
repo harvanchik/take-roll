@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T19:50:31.714Z",
-  "note": "Reviewed switching on-device speech input from written phonetic spelling to the person's preferred/first and last name. Existing pronunciation display remains unchanged. Device processing notice reflects the spoken name input. No new providers, storage, server processing, sharing, fees, or material agreement changes.",
-  "digest": "ddaed4907e9f951624ff75f6d39753edfa504ed6b0689b233db2b2833643e311"
+  "reviewedAt": "2026-11-16T19:55:26.293Z",
+  "note": "Reviewed roll-call pronunciation layout only: audio control remains outside the scrolling text container. No playback, data, privacy, retention or agreement changes.",
+  "digest": "6e1602598a4380cecc9accf3010b3e6dba151c9ec24231dbe5c6b27ebdad3c04"
 }

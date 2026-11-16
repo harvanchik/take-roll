@@ -1746,3 +1746,7 @@ button.person-id{cursor:pointer}
 textarea{overflow-x:hidden}
 
 .pronunciation-audio{display:inline-flex!important;vertical-align:middle;align-items:center;justify-content:center;width:22px!important;height:22px!important;min-height:22px!important;padding:3px!important;margin-left:4px;flex:0 0 22px;transform:none}.pronunciation-audio:disabled{cursor:default}
+.attendance-person-link>.pronunciation-line{display:flex;align-items:center;min-width:0;width:100%;max-width:100%}
+.attendance-person-link>.pronunciation-line>.pronunciation{flex:0 1 auto;min-width:0;max-width:100%;margin-top:0}
+.attendance-person-link>.pronunciation-line>.pronunciation-audio{flex:none;margin-left:4px}
+.app-shell[data-show-pronunciations=false] .pronunciation-line{display:none}
