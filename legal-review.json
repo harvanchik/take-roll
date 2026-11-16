@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T19:38:30.373Z",
-  "note": "Reviewed optional on-device pronunciation playback, localService-only voice selection, a single playback lock released on completion/error, and cancellation of stalled playback. No paid speech API, audio storage, microphone access or new server processing. Device processing notice explains local speech and device-dependent availability and accuracy; accepted agreements remain unchanged.",
-  "digest": "99376cb1e23ef7a34b77b4136cc38c2b4c203eb82cfb6fdedac93a7fffc227db"
+  "reviewedAt": "2026-11-16T19:50:31.714Z",
+  "note": "Reviewed switching on-device speech input from written phonetic spelling to the person's preferred/first and last name. Existing pronunciation display remains unchanged. Device processing notice reflects the spoken name input. No new providers, storage, server processing, sharing, fees, or material agreement changes.",
+  "digest": "ddaed4907e9f951624ff75f6d39753edfa504ed6b0689b233db2b2833643e311"
 }
