@@ -1734,3 +1734,4 @@ button.person-id{cursor:pointer}
 .save-dock.save-error strong,.save-dock.save-error small{display:inline;white-space:nowrap;max-width:none;font-size:10px;line-height:1.4}
 .save-dock.save-error small{overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media(max-width:760px){.save-dock.save-error{max-width:calc(100vw - 20px)}.save-dock.save-error strong{display:none}.save-dock.save-error .small{padding:4px 5px;font-size:9px}.save-dock.save-error{gap:5px}}
+.expanded-note-input{position:relative;min-width:0;width:100%}.expanded-note-input>.inline-person-note{padding-right:32px!important}.expanded-note-input>.expand-note{position:absolute;right:3px;top:50%;transform:translateY(-50%);width:26px;height:26px;padding:4px}.expanded-note-editor{display:block;width:100%;min-height:280px;max-height:60vh;resize:vertical;line-height:1.6}.expanded-note-modal{width:min(620px,calc(100vw - 32px))}

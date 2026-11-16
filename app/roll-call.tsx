@@ -172,6 +172,7 @@ export default function RollCall({demo=false}:{demo?:boolean}={}){
  const saveChanges=async()=>{flushDrafts();const queue=queueRef.current;const saved=!!queue&&await queue.savePending();if(saved)feedback('success');return saved;};
  const discardChanges=()=>{if(queueRef.current?.snapshot().saving)return;queueRef.current?.discard();window.dispatchEvent(new window.Event('attendance:discard-drafts'));window.dispatchEvent(new window.Event('attendance:discard-excuses'));setError('');feedback('undo');};
  const saveHandler=useRef(saveChanges);saveHandler.current=saveChanges;
+ useEffect(()=>{const save=(event:globalThis.Event)=>{const resolve=(event as CustomEvent<{resolve:(ok:boolean)=>void}>).detail?.resolve;void saveHandler.current().then(ok=>resolve?.(ok),()=>resolve?.(false));};window.addEventListener('attendance:save-request',save);return()=>window.removeEventListener('attendance:save-request',save);},[]);
  useEffect(()=>{if(demo)return;const shortcut=(e:KeyboardEvent)=>{if(!(e.ctrlKey||e.metaKey)||e.altKey||e.key.toLowerCase()!=='s'||!accountRef.current)return;e.preventDefault();const form=(e.target as Element)?.closest?.('form.settings-card') as HTMLFormElement|null;if(form)void saveHandler.current().then(saved=>{if(saved)form.requestSubmit();});else void saveHandler.current();};window.addEventListener('keydown',shortcut);return()=>window.removeEventListener('keydown',shortcut);},[demo]);
  const hapticError=error||queueState?.error||'';
  useEffect(()=>{if(hapticError)feedback('error');},[hapticError]);
