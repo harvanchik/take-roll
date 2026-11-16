@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T20:09:39.590Z",
-  "note": "Reviewed desktop attendance stat layout and mouse-wheel scrolling. Presentation only; no data handling or legal terms changes.",
-  "digest": "e2185420669058eb8bae6ee617bd1c618e9d0da7132af4a0768dbe6bf2024139"
+  "reviewedAt": "2026-11-16T20:54:00.166Z",
+  "note": "Reviewed smooth desktop attendance scrolling and equal card heights. Presentation only; no data handling or terms changes.",
+  "digest": "c2df1e984d0248bf5e1e67e458e267453c27d592e18966372ed14a1c22e9c93e"
 }

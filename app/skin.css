@@ -1764,3 +1764,8 @@ textarea{overflow-x:hidden}
 .pinned-summary .stat>span,.pinned-summary .stat>strong{align-self:start!important;margin-top:0!important}
 .pinned-summary .stat{align-content:stretch;min-width:0}
 }
+
+@media(min-width:761px){
+.stats-grid.custom-stats.pinned-summary{padding-bottom:var(--status-scroll-space,14px)}
+.pinned-summary>.status-stat-scroll{padding-bottom:6px;margin-bottom:calc(-1 * var(--status-scroll-space,14px))}
+}

@@ -11,7 +11,21 @@ export function attendanceTotals(event:Event,c:AttendanceSettings){
 export default function AttendanceSummary({event,filter,onToggle,collapsed=false,interactive=true}:{event:Event;filter:string[];onToggle:(id:string)=>void;collapsed?:boolean;interactive?:boolean}){
  const {attendance:c}=useNamePreferences(),v=attendanceTotals(event,c),pct=(n:number)=>v.total?Math.round(n/v.total*100):0;
  const statusScroll=useRef<HTMLDivElement>(null);
- useEffect(()=>{const node=statusScroll.current;if(!node)return;const wheel=(event:WheelEvent)=>{if(!window.matchMedia('(min-width:761px)').matches||node.scrollWidth<=node.clientWidth+1||event.ctrlKey||Math.abs(event.deltaX)>Math.abs(event.deltaY))return;const before=node.scrollLeft;node.scrollLeft+=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?node.clientWidth:1);if(node.scrollLeft!==before)event.preventDefault();};node.addEventListener('wheel',wheel,{passive:false});return()=>node.removeEventListener('wheel',wheel);},[]);
+ useEffect(()=>{
+  const node=statusScroll.current;if(!node)return;let frame=0,target=node.scrollLeft;
+  const reduced=window.matchMedia('(prefers-reduced-motion:reduce)');
+  const animate=()=>{const distance=target-node.scrollLeft;if(Math.abs(distance)<.5){node.scrollLeft=target;frame=0;return;}node.scrollLeft+=distance*.2;frame=requestAnimationFrame(animate);};
+  const measure=()=>{node.parentElement?.style.setProperty('--status-scroll-space',(node.offsetHeight-node.clientHeight+6)+'px');};
+  const observer=new ResizeObserver(measure);observer.observe(node);measure();
+  const wheel=(event:WheelEvent)=>{
+   if(!window.matchMedia('(min-width:761px)').matches||node.scrollWidth<=node.clientWidth+1||event.ctrlKey||Math.abs(event.deltaX)>Math.abs(event.deltaY))return;
+   if(!frame)target=node.scrollLeft;
+   const next=Math.max(0,Math.min(node.scrollWidth-node.clientWidth,target+event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?node.clientWidth:1)));
+   if(next===target)return;event.preventDefault();target=next;
+   if(reduced.matches){node.scrollLeft=target;}else if(!frame)frame=requestAnimationFrame(animate);
+  };
+  node.addEventListener('wheel',wheel,{passive:false});return()=>{node.removeEventListener('wheel',wheel);observer.disconnect();cancelAnimationFrame(frame);};
+ },[]);
  const Card=interactive?'button':'div';
  const primary=v.statuses.map((s,i)=>({id:s.id,name:s.name,color:s.color,count:v.counts[i],split:s.allowExcuse?attendanceBreakdown(event,s.id):null}));
  const unexcused=primary.filter(s=>s.split),excused=v.counts[v.statuses.length],unexcusedTotal=v.counts[v.statuses.length+1];
