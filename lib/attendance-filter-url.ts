@@ -9,3 +9,6 @@ export function writeAttendanceFilters(query:string,filters:PersonAttendanceFilt
  for(const key of ['from','to','roster','status','excuse','search'] as const){q.delete(key);const value=filters[key];for(const item of Array.isArray(value)?value:[value])if(item)q.append(key,item);}
  return q.toString();
 }
+
+/** Remember the page and compared people, without persisting attendance filters. */
+export function attendanceBookmarkPath(path:string){const [page,query='']=path.split('?');if(!/^\/(person\/|compare$)/.test(page))return path;const q=writeAttendanceFilters(query,emptyAttendanceFilters());return page+(q?'?'+q:'');}

@@ -14,6 +14,7 @@ import {orderedRosters,mergeRosterOrder} from '../lib/roster-order';
 import SidebarFavorites from './sidebar-favorites';
 import ConflictReviewModal from './conflict-review-modal';
 import {describeConflict} from '../lib/conflict-review';
+import {attendanceBookmarkPath} from '../lib/attendance-filter-url';
 import ComparePeople from './compare-people';
 import PersonAttendance from './person-attendance';
 import RosterStats from './roster-stats';
@@ -317,7 +318,7 @@ export default function RollCall({demo=false}:{demo?:boolean}={}){
   if(mode!=='read'&&window.location.pathname+window.location.search!==target){if(mode==='push')navigation.current.index++;window.history[mode==='push'?'pushState':'replaceState']({...window.history.state,takeRollIndex:navigation.current.index},'',target);}
   navigation.current.path=path;
   if(path!==previousPath&&(requestedMode==='push'||requestedMode==='read'))refreshAfterNavigation();
-  if(!route.missing){try{localStorage.setItem(accountStorage('roll-call.last-page.v1'),path);}catch{}}
+  if(!route.missing){try{localStorage.setItem(accountStorage('roll-call.last-page.v1'),attendanceBookmarkPath(path));}catch{}}
   document.querySelector('.main-shell')?.scrollTo({top:0});window.scrollTo({top:0});
  }
  function openEvent(id:string,source?:Data){const records=source||queueRef.current?.data||data;const found=records?.events.find(e=>e.id===id);if(found&&records)navigate(found.parentEventId?eventPath(found,records):eventPath(found),'push',records);}

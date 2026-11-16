@@ -4,7 +4,7 @@ import {createRequire} from 'node:module';
 import {dirname} from 'node:path';
 import {seedData} from './fixtures.mjs';
 import {applyAction} from '../lib/model.ts';
-import {emptyAttendanceFilters,readAttendanceFilters,writeAttendanceFilters} from '../lib/attendance-filter-url.ts';
+import {emptyAttendanceFilters,readAttendanceFilters,writeAttendanceFilters,attendanceBookmarkPath} from '../lib/attendance-filter-url.ts';
 import {resolvePage} from '../lib/navigation.ts';
 const require=createRequire(import.meta.url),{build}=require(require.resolve('esbuild',{paths:[dirname(require.resolve('wrangler/package.json'))]}));
 await build({entryPoints:['lib/attendance-queue.ts'],bundle:true,platform:'node',format:'esm',outfile:'.sites-runtime/conflict-review-test.mjs'});
@@ -14,7 +14,7 @@ test('attendance filter URLs round trip multiple selections and preserve workspa
  const query=writeAttendanceFilters('workspace=example&people=ABC1234,DEF5678',filters);
  assert.deepEqual(readAttendanceFilters(query),filters);assert.equal(new URLSearchParams(query).get('people'),'ABC1234,DEF5678');assert.equal(new URLSearchParams(query).get('workspace'),'example');
  const cleared=writeAttendanceFilters(query,emptyAttendanceFilters());assert.equal(new URLSearchParams(cleared).has('search'),false);assert.equal(new URLSearchParams(cleared).get('workspace'),'example');
- assert.equal(readAttendanceFilters('from=oops').from,'');assert.equal(resolvePage(seedData(),'/compare?people=ABC1234,DEF5678').view,'compare');
+ assert.equal(attendanceBookmarkPath('/compare?people=ABC1234,DEF5678&search=Training&from=2026-10-01'),'/compare?people=ABC1234%2CDEF5678');assert.equal(attendanceBookmarkPath('/person/ABC1234?status=Present'),'/person/ABC1234');assert.equal(readAttendanceFilters('from=oops').from,'');assert.equal(resolvePage(seedData(),'/compare?people=ABC1234,DEF5678').view,'compare');
 });
 test('conflict review resolves one edit while preserving a separate pending change',async()=>{
  let data=seedData();data=applyAction(data,{type:'create-event',rosterId:data.rosters[0].id,name:'Synthetic Training',date:'2026-11-15'});data={...data,preferences:{...data.preferences,autoSave:false}};
