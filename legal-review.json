@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T04:34:06.590Z",
-  "note": "Reviewed comparison and person-record URL filters and workspace-gated shared links; attendance filters are excluded from remembered last-page bookmarks. Reviewed conflict review, custom validation, and display changes. Privacy and Cookies explain URL person identifiers, filters, search-text sharing, and unchanged workspace access. No new providers, public data access, or material Terms/EULA or DPA change; existing records and acceptance evidence preserved.",
-  "digest": "810c16842872c67f3a5850017ff4412dbe76d3afdfad134e130e37394e89cc51"
+  "reviewedAt": "2026-11-16T04:37:06.805Z",
+  "note": "Reviewed comparison and person-record URL filters, with filters excluded from remembered last-page bookmarks. Privacy and Cookies explain shared URL identifiers, filters and search text, with workspace access unchanged. Reviewed conflict review, custom validation, and scrolling display containers; notes remain within standard table cells. No new providers, public data access, or material Terms/EULA or DPA change; existing records and acceptance evidence preserved.",
+  "digest": "def527178f0855741b5c83cb1b23752b2722c6def83287adaa3e1657180f04c3"
 }
