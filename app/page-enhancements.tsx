@@ -1,6 +1,7 @@
 'use client';
 import {Component,useEffect,useState,type ReactNode} from 'react';
 import SettingsValidation from './settings-validation';
+import TextareaOverflow from './textarea-overflow';
 import PersonTextMarquee from './person-text-marquee';
 import TableScrollChaining from './table-scroll-chaining';
 import PreferenceSync from './preference-sync';
@@ -34,6 +35,7 @@ function StorageNotice(){
 export default function PageEnhancements(){useEffect(()=>installViewportGuards(),[]);return <>
  <EnhancementBoundary><TableScrollChaining/></EnhancementBoundary>
  <EnhancementBoundary><SettingsValidation/></EnhancementBoundary>
+ <EnhancementBoundary><TextareaOverflow/></EnhancementBoundary>
  <EnhancementBoundary><PersonTextMarquee/></EnhancementBoundary>
  <EnhancementBoundary><Tooltips/></EnhancementBoundary>
  <EnhancementBoundary><HapticFeedback/></EnhancementBoundary>

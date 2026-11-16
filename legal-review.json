@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T18:22:53.051Z",
-  "note": "Reviewed note icon centering and note modal dimensions/resizing only. Existing note saving and data processing remain unchanged; no legal document or agreement version changes needed.",
-  "digest": "03295701af3bf6b908d729c98bf41cb26355db226f702e365c4dc528ed0a4364"
+  "reviewedAt": "2026-11-16T19:30:49.256Z",
+  "note": "Reviewed textarea overflow measurement and one-line note sizing. Scrollbars appear only for actual content overflow and adjust after focus, edits, fonts and resizing. No changes to note data, saving, collection, sharing, retention or accepted legal terms.",
+  "digest": "6a66f77c333dd08f13369d4dc5b0bdb793361013c1a07e39c8c13d1b2ed59729"
 }

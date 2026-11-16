@@ -1741,3 +1741,6 @@ button.person-id{cursor:pointer}
 .expanded-note-input>.expand-note{grid-area:1/1;position:relative;top:auto;right:auto;transform:none;justify-self:end;align-self:center;margin:0 3px 0 0;width:26px;height:26px;min-height:26px}
 .app-modal.expanded-note-modal{width:min(775px,calc(100vw - 32px))}
 .app-modal.expanded-note-modal .expanded-note-editor{height:140px;min-height:70px;max-height:70vh;resize:vertical;box-sizing:border-box}
+/* A 32px desktop note must fit one line including padding and borders. */
+@media(min-width:761px){.attendance-row .inline-person-note,.roster-record-page .inline-person-note{line-height:20px;padding-top:5px;padding-bottom:5px;box-sizing:border-box}}
+textarea{overflow-x:hidden}
