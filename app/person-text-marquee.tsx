@@ -1,7 +1,7 @@
 'use client';
 import {reducedMotion} from '../lib/motion';
 import {useEffect} from 'react';
-const selector='.event-card h3,.recent-title,.person-record-event,.editable-event-title,.event-title-button,.event-page-title-text,.compare-note,.person-record-note,.roster-person-link,.attendance-person-link>strong,.roster-pronunciations,.pronunciation,.person-attendance-page .page-heading h1,.person-record-meta>span,.person-identity-name>strong,.report-person-line>span,.comparison-table-scroll tbody th a,.mobile-card-name h3,.mobile-card-name p,.csv-preview-row:not(.csv-preview-head)>span,a[href*="/person/"]:not(.attendance-person-link)';
+const selector='.stats-grid.custom-stats .stat>span,.event-card h3,.recent-title,.person-record-event,.editable-event-title,.event-title-button,.event-page-title-text,.compare-note,.person-record-note,.roster-person-link,.attendance-person-link>strong,.roster-pronunciations,.pronunciation,.person-attendance-page .page-heading h1,.person-record-meta>span,.person-identity-name>strong,.report-person-line>span,.comparison-table-scroll tbody th a,.mobile-card-name h3,.mobile-card-name p,.csv-preview-row:not(.csv-preview-head)>span,a[href*="/person/"]:not(.attendance-person-link)';
 export default function PersonTextMarquee(){
  useEffect(()=>{
   const entries=new Map<HTMLElement,{start:number;distance:number}>(),nodes=new Set<HTMLElement>(),reduce=window.matchMedia('(prefers-reduced-motion: reduce)');let frame=0,scanFrame=0;

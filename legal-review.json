@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T20:54:00.166Z",
-  "note": "Reviewed smooth desktop attendance scrolling and equal card heights. Presentation only; no data handling or terms changes.",
-  "digest": "c2df1e984d0248bf5e1e67e458e267453c27d592e18966372ed14a1c22e9c93e"
+  "reviewedAt": "2026-11-16T20:57:16.103Z",
+  "note": "Reviewed larger attendance stat titles using shared overflow animation. Presentation only; no data handling or legal terms changes.",
+  "digest": "02b8e4b0a53cdc41f7ce3154ef662b6b6c77d7c734517cbe6f56b6ca181f26ec"
 }

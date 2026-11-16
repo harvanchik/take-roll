@@ -1769,3 +1769,8 @@ textarea{overflow-x:hidden}
 .stats-grid.custom-stats.pinned-summary{padding-bottom:var(--status-scroll-space,14px)}
 .pinned-summary>.status-stat-scroll{padding-bottom:6px;margin-bottom:calc(-1 * var(--status-scroll-space,14px))}
 }
+
+/* Stat headings share their count size and the app-wide overflow marquee. */
+.stats-grid.custom-stats .stat>span{font-size:27px;line-height:1;min-width:0;max-width:100%;white-space:nowrap;overflow:hidden}
+@media(max-width:760px){.stats-grid.custom-stats .stat>span{font-size:24px}}
+.attendance-custom-preview .stats-grid.custom-stats .stat>span{font-size:22px}
