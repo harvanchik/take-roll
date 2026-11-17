@@ -1,6 +1,6 @@
 'use client';
 import PronunciationAudio,{spokenPersonName} from './pronunciation-audio';
-import {useDisplayDates,usePersonalPreferences,useRememberedView} from './personal-preferences';
+import {useDisplayDates,usePersonalPreferences} from './personal-preferences';
 import useAttendanceFilters from './use-attendance-filters';
 import {useMemo,useState,type MouseEvent} from 'react';
 import {ArrowUpRight,Search} from 'lucide-react';

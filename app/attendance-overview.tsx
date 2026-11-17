@@ -24,6 +24,7 @@ export default function AttendanceOverview({data,parent,workspaceId,onNavigate,d
  const {formatDay,formatTimestamp}=useDisplayDates();
  const {displayName,displayPronunciation,attendance:baseConfig,settings}=useNamePreferences();
  const family=eventFamily(data,parent),[scope,setScope]=useState<'family'|'all'>(demo?'family':selection?.scope||'family'),[selected,setSelected]=useState<string[]>(selection?.selected||family.map(e=>e.id));
+ useEffect(()=>{if(selection){setScope(selection.scope);setSelected(selection.selected);}},[selection]);
  const updateSelection=(next:ComparisonSelection)=>{setScope(next.scope);setSelected(next.selected);onSelection(next);};
  const tableSort=useTableSort(defaultSort(settings),parent.id);
  const sort=tableSort.sort,toggle=tableSort.toggle;

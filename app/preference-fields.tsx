@@ -42,7 +42,7 @@ export default function PreferenceFields({value:p,onChange,canHaptic,disabled}:{
  {select('startingPage','Starting Page',[['events','Events'],['rosters','Rosters'],['last','Last Visited Page']])}
  {select('defaultEventView','Default Event View',[['roll-call','Roll Call'],['overview','Attendance Overview']])}
  <div className="preference-field"><div className="preference-field-label"><label htmlFor={id+'-search-shortcut'}>App Search Shortcut</label><InfoPopover label="About App Search Shortcut">Click the field, then press your preferred keys with Ctrl/Cmd or Alt. Shift is optional.</InfoPopover></div><input id={id+'-search-shortcut'} data-shortcut-recorder readOnly aria-label="App Search Shortcut" value={displaySearchShortcut(p.globalSearchShortcut,mac)} onKeyDown={event=>{if(['Tab','Escape'].includes(event.key))return;event.preventDefault();event.stopPropagation();const shortcut=recordSearchShortcut(event);if(shortcut)onChange({...p,globalSearchShortcut:shortcut});}}/></div>
- {boolean('rememberFilters','Remember Search & Filters')}{boolean('showPersonIds','Show Person IDs In Roll Call')}
+ {boolean('showPersonIds','Show Person IDs In Roll Call')}
  </div></SettingsGroup>
  <SettingsGroup title="Dates & Time" open><div className="preference-fields">
  {select('dateFormat','Date Format',[['text','24 Oct 2026'],['mdy','10/24/2026'],['dmy','24/10/2026'],['iso','2026-10-24']])}

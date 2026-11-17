@@ -1,3 +1,4 @@
+import {pageFilterKeys} from './page-filter-url.ts';
 import type {PersonAttendanceFilter} from './person-attendance';
 export const emptyAttendanceFilters=():PersonAttendanceFilter=>({from:'',to:'',roster:[],status:[],excuse:[],search:''});
 export function readAttendanceFilters(query:string):PersonAttendanceFilter{
@@ -11,4 +12,4 @@ export function writeAttendanceFilters(query:string,filters:PersonAttendanceFilt
 }
 
 /** Remember the page and compared people, without persisting attendance filters. */
-export function attendanceBookmarkPath(path:string){const [page,query='']=path.split('?');if(!/^\/(person\/|compare$)/.test(page))return path;const q=writeAttendanceFilters(query,emptyAttendanceFilters());return page+(q?'?'+q:'');}
+export function attendanceBookmarkPath(path:string){const [page,query='']=path.split('?');const q=new URLSearchParams(query);for(const key of pageFilterKeys)q.delete(key);return page+(q.size?'?'+q.toString():'');}

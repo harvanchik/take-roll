@@ -1,5 +1,5 @@
 'use client';
-import {useDisplayDates,useRememberedView} from './personal-preferences';
+import {useDisplayDates,usePageSearch} from './personal-preferences';
 import {useNamePreferences} from './name-preferences';
 import {useState} from 'react';
 import {Eye,Undo2,Trash2,Search,CalendarDays,Users,CheckCheck} from 'lucide-react';
@@ -11,7 +11,7 @@ import AttendanceSegments from './attendance-segments';
 export default function ArchiveList({events,busy,onAction,onView}:{events:Event[];busy:boolean;onAction:(action:any)=>Promise<unknown>;onView:(event:Event)=>void}){
  const {formatDay,formatTimestamp}=useDisplayDates();
  const {settings}=useNamePreferences();
- const [confirm,setConfirm]=useState(''),[filters,setFilters]=useRememberedView('archive',{search:''});const search=filters.search,setSearch=(search:string)=>setFilters({search});
+ const [confirm,setConfirm]=useState(''),[filters,setFilters]=usePageSearch('archive');const search=filters.search,setSearch=(search:string)=>setFilters({search});
  const visible=events.filter(e=>!e.parentEventId).filter(e=>`${e.name} ${e.rosterName}`.toLowerCase().includes(search.toLowerCase())).toSorted((a,b)=>(b.archivedAt||'').localeCompare(a.archivedAt||''));
  const roots=events.filter(e=>!e.parentEventId),summary=(e:Event)=>({...e,participants:events.filter(item=>item.id===e.id||item.parentEventId===e.id).flatMap(item=>item.participants)});
  return <><div className="page-heading"><div><div className="eyebrow">ATTENDANCE WORKSPACE</div><h1>Archive</h1></div></div><div className="overview"><div><CalendarDays size={20}/><span><strong>{roots.length}</strong> archived events</span></div><div><Users size={20}/><span><strong>{new Set(roots.map(e=>e.rosterId)).size}</strong> rosters</span></div><div><CheckCheck size={20}/><span><strong>{roots.filter(e=>!e.settings?.testOnly&&counts(summary(e)).unmarked===0).length}</strong> attendance records complete</span></div></div><div className="section-title"><h2>Archived Events</h2></div><div className="event-list-toolbar archive-list-toolbar"><label className="search-box" data-tooltip="Search Archived Events (Ctrl/Cmd + F)"><Search size={17}/><input data-page-search aria-label="Search Archived Events" placeholder="Search Archived Events…" value={search} onChange={e=>setSearch(e.target.value)}/></label></div><div className="events-grid archive-events-grid">{visible.map(e=>{
