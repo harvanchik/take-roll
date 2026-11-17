@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T19:59:23.785Z",
-  "note": "Updated landing intro free-use wording and removed redundant header sign-in anchor. Sign-in controls and account/guest behavior remain unchanged; policies still accurate.",
-  "digest": "b765e72dba756ee696f92229dab924144003cc476890d5282aa464feee550e1d"
+  "reviewedAt": "2026-11-17T20:01:25.945Z",
+  "note": "Simplified public landing copy and removed redundant sign-in header link. Free pricing, authentication, guest behavior, and all policies remain unchanged.",
+  "digest": "4d9e08aa930bf703f7af9b9bf350587baac1dad22050d4c9ad37d77dc2327072"
 }
