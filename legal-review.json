@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-16T20:57:16.103Z",
-  "note": "Reviewed larger attendance stat titles using shared overflow animation. Presentation only; no data handling or legal terms changes.",
-  "digest": "02b8e4b0a53cdc41f7ce3154ef662b6b6c77d7c734517cbe6f56b6ca181f26ec"
+  "reviewedAt": "2026-11-17T15:40:59.042Z",
+  "note": "Reviewed Ctrl/Cmd+B sidebar toggle reusing existing visibility and width storage. No new data collection or policy changes.",
+  "digest": "f5a74114c35989e89f2f555269fc46301b7737a2dc54d365548b61c453372ca5"
 }
