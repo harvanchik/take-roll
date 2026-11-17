@@ -26,12 +26,12 @@ function StatNumber({value,animate=true}:{value?:number;animate?:boolean}){
 function StatContent({Icon,label,value,animate=true}:{Icon:LucideIcon;label:string;value?:number;animate?:boolean}){
  return <div className="community-stat-content"><Icon size={18} aria-hidden="true"/><strong><StatNumber value={value} animate={animate}/></strong><span>{label}</span></div>;
 }
-export default function CommunityStats(){
- const [stats,setStats]=useState<PublicStats|null>(null),[failed,setFailed]=useState(false);
- useEffect(()=>{const controller=new AbortController();fetch('/api/stats?v=3',{signal:controller.signal}).then(async r=>{if(!r.ok)throw Error();const data=await r.json() as PublicStats;if(!['organizations','events','attendance','absences','tardies','present'].every(key=>Number.isSafeInteger(data[key as keyof PublicStats])&&data[key as keyof PublicStats]>=0))throw Error();setStats(data);}).catch(()=>{if(!controller.signal.aborted)setFailed(true);});return()=>controller.abort();},[]);
- return <section className="community-stats auth-card" aria-labelledby="community-stats-title">
+export default function CommunityStats({initialStats=null}:{initialStats?:PublicStats|null}){
+ const [stats,setStats]=useState<PublicStats|null>(initialStats),[failed,setFailed]=useState(false);
+ useEffect(()=>{const controller=new AbortController();let pending=false;const refresh=async()=>{if(pending)return;pending=true;try{const r=await fetch('/api/stats?v=4',{signal:controller.signal});if(!r.ok)throw Error();const data=await r.json() as PublicStats;if(!['organizations','events','attendance','absences','tardies','present'].every(key=>Number.isSafeInteger(data[key as keyof PublicStats])&&data[key as keyof PublicStats]>=0))throw Error();setStats(data);setFailed(false);}catch{if(!controller.signal.aborted)setFailed(true);}finally{pending=false;}};if(!initialStats)void refresh();const timer=setInterval(()=>void refresh(),300000);return()=>{controller.abort();clearInterval(timer);};},[initialStats]);
+ return <section id="community-stats" className="community-stats auth-card" aria-labelledby="community-stats-title">
   <div className="community-heading"><div><span className="eyebrow">A LITTLE ROLL-CALL CURIOSITY</span><h2 id="community-stats-title">Every Check-In Adds Up.</h2></div></div>
-  {failed?<p className="muted">Community stats are taking a break. Check back soon.</p>:<div className="community-grid" aria-busy={!stats}>
+  {failed&&!stats?<p className="muted">Community stats are taking a break. Check back soon.</p>:<div className="community-grid" aria-busy={!stats}>
    {[{Icon:Building2,label:'Organizations Created',value:stats?.organizations},{Icon:CalendarDays,label:'Events Organized',value:stats?.events},{Icon:ListChecks,label:'Attendance Marks Recorded',value:stats?.attendance}].map(stat=><div className="community-stat" key={stat.label}><StatContent {...stat}/></div>)}
    <div className="community-stat community-stat-rotator">
     {/* Give screen readers all three totals once, without announcing every visual slide. */}

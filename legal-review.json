@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T16:59:18.371Z",
-  "note": "Reviewed URL-only page search and filters, compact shared links, browser navigation restoration, removal of stored filter preference, and privacy/cookie notices updated to describe URL search text and browser history. No contract or accepted agreement changes.",
-  "digest": "dcaf723bf9c2657d4b1ca63274cdb36718759378d511186119fa53ec09b13ebd"
+  "reviewedAt": "2026-11-17T18:56:36.742Z",
+  "note": "Reviewed request-time SSR public marketing with cache-only initial aggregate totals, accessible FAQ/navigation, factual metadata and crawler assets. No new personal-data processing, auth, database calculations or accepted-contract changes.",
+  "digest": "63c0a18a7239b4eadded4d5a82d3f34c48c540096bbc1f9a0b7e2b1ba8931e58"
 }

@@ -13,7 +13,7 @@ export const viewport:Viewport={width:'device-width',initialScale:1,viewportFit:
 const description='Take roll. Keep track. Saved rosters, live collaboration, and a history of every change—all in one shared workspace.';
 export const metadata:Metadata={
  metadataBase:new URL('https://takeroll.online'),
- title:'Take Roll · Attendance',description,
+ title:'Take Roll · Attendance',description,robots:{index:false,follow:false},
  openGraph:{type:'website',locale:'en_US',siteName:'Take Roll',url:'https://takeroll.online/',title:'Take Roll. Keep Track.',description,images:[{url:'https://takeroll.online/share-card-v1.png',width:1200,height:630,type:'image/png',alt:'Take Roll. Keep Track. Saved rosters, live collaboration, and attendance history.'}]},
  twitter:{card:'summary_large_image',title:'Take Roll. Keep Track.',description,images:[{url:'https://takeroll.online/share-card-v1.png',alt:'Take Roll. Keep Track. Attendance for your whole team.'}]},
 };

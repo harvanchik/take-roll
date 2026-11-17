@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /events
+Disallow: /event/
+Disallow: /event-settings/
+Disallow: /rosters
+Disallow: /roster/
+Disallow: /person/
+Disallow: /compare
+Disallow: /archive
+Disallow: /settings
+Disallow: /agreement
+Disallow: /callback
+Disallow: /signin-with-chatgpt
+Disallow: /signout-with-chatgpt
+
+Sitemap: https://takeroll.online/sitemap.xml
