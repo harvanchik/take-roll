@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T20:45:06.979Z",
-  "note": "Public attendance guide and descriptive metadata only; no new processing, tracking, providers or access changes. Existing legal notices remain accurate.",
-  "digest": "a3f6124885f9c01f6357e4d3c9c6d6d0db837359d50a27226ebd708e1cd75e8d"
+  "reviewedAt": "2026-11-17T21:56:13.535Z",
+  "note": "Added numeric browser-only column width preferences for data tables, excluding calendar grids and icon-only columns. No server or record changes; existing preference-storage notice remains accurate.",
+  "digest": "6685d062d68ac5730675ea7b06943eb37200e043c3f6b7b4c33f155ecbf8bdce"
 }
