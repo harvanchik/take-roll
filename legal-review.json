@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T22:27:00.453Z",
-  "note": "Corrected table resize boundary behavior: adjacent column widths offset so the right edge remains fixed. Existing browser-local preferences and disclosures unchanged.",
-  "digest": "9db545f5e085e7e7af09092623b732f6dc9c21f56d5d77ac7c9f3265a82c2c48"
+  "reviewedAt": "2026-11-17T22:32:13.138Z",
+  "note": "Inset vertical table scrollbar tracks below headers. Visual presentation only; no storage, data, access, or policy changes.",
+  "digest": "365c30fd50f6eab1925867bda83f560334589dce8cfdb667f765568e66862457"
 }

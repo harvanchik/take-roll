@@ -1798,3 +1798,6 @@ table[data-columns-resized=true]>thead>tr>th,table[data-columns-resized=true]>tb
 
 /* Resize the start of a column; its far edge stays anchored. */
 .column-resize-handle{right:auto;left:-5px}
+
+/* Native vertical tracks begin below table headings, leaving horizontal scrolling intact. */
+[data-table-header-scroll=true]::-webkit-scrollbar-track:vertical{margin-top:var(--table-header-scroll-inset,0px)}

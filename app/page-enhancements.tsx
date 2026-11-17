@@ -5,6 +5,7 @@ import TextareaOverflow from './textarea-overflow';
 import PersonTextMarquee from './person-text-marquee';
 import TableScrollChaining from './table-scroll-chaining';
 import TableColumnResizing from './table-column-resizing';
+import TableScrollbarInsets from './table-scrollbar-insets';
 import PreferenceSync from './preference-sync';
 import {installViewportGuards} from '../lib/installed-viewport';
 import HapticFeedback from './haptic-feedback';
@@ -36,6 +37,7 @@ function StorageNotice(){
 export default function PageEnhancements(){useEffect(()=>installViewportGuards(),[]);return <>
  <EnhancementBoundary><TableScrollChaining/></EnhancementBoundary>
  <EnhancementBoundary><TableColumnResizing/></EnhancementBoundary>
+ <EnhancementBoundary><TableScrollbarInsets/></EnhancementBoundary>
  <EnhancementBoundary><SettingsValidation/></EnhancementBoundary>
  <EnhancementBoundary><TextareaOverflow/></EnhancementBoundary>
  <EnhancementBoundary><PersonTextMarquee/></EnhancementBoundary>
