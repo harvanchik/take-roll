@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T15:40:59.042Z",
-  "note": "Reviewed Ctrl/Cmd+B sidebar toggle reusing existing visibility and width storage. No new data collection or policy changes.",
-  "digest": "f5a74114c35989e89f2f555269fc46301b7737a2dc54d365548b61c453372ca5"
+  "reviewedAt": "2026-11-17T15:46:11.605Z",
+  "note": "Reviewed editing subevent names and dates using existing history and conflict protection. No new data categories, sharing or policy changes.",
+  "digest": "f987549e269d66936559d15f06b2d5fe1bc6916c3a4c175eb2149e08ae873c05"
 }

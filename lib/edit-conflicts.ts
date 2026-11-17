@@ -19,7 +19,7 @@ export function editTarget(data:Data,a:Action):unknown{
   case 'rename-event':return value(e?.name);
   case 'prepare-delete-subevent':case 'delete-subevent':{if(!e)return value(null);const {history,updatedAt,subeventDeletions,...target}=e;return value(e.parentEventId?{...target,history:e.history}:target);}
   case 'restore-subevent':return value(e?.subeventDeletions?.[a.subeventId]);
-  case 'rename-subevent':return value(e?.subeventName||'Day 1');
+  case 'rename-subevent':return value(a.date===undefined?e?.subeventName||'Day 1':{name:e?.subeventName||'Day 1',date:e?.date});
   case 'set-statuses':return value(a.changes?.map((c:any)=>attendance(c.personId)));
   case 'set-person-field':return value(a.changes?.map((c:any)=>{const person=e?.participants.find(p=>p.id===c.personId);return a.field==='removed'?member(person):{personId:c.personId,value:person?(a.field==='flag'?person.flag??null:person.note):null,removed:person?.removed??null};}));
   case 'mark-remaining':return value(e?.participants.map(p=>attendance(p.id)));

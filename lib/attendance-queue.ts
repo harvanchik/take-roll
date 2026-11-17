@@ -43,7 +43,7 @@ export function conflictReverseAction(data:Data,action:Action):Action|undefined{
  case 'report-settings':return {type:action.type,settings:data.reportSettings};
  case 'update-event-settings':return e?{type:action.type,eventId:e.id,settings:e.settings||{useGlobal:true}}:undefined;
  case 'rename-roster':return r?{type:action.type,rosterId:r.id,name:r.name}:undefined;
- case 'rename-subevent':return e?{type:action.type,eventId:e.id,name:e.subeventName||'Day 1'}:undefined;
+ case 'rename-subevent':return e?{type:action.type,eventId:e.id,name:e.subeventName||'Day 1',...(action.date===undefined?{}:{date:e.date})}:undefined;
  case 'roster-person-note':return r?{...action,note:(editTarget(data,action) as {value:string}).value}:undefined;
  default:try{return attendanceMove(data,action).backward;}catch{return undefined;}
  }
