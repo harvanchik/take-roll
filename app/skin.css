@@ -1801,3 +1801,8 @@ table[data-columns-resized=true]>thead>tr>th,table[data-columns-resized=true]>tb
 
 /* Native vertical tracks begin below table headings, leaving horizontal scrolling intact. */
 [data-table-header-scroll=true]::-webkit-scrollbar-track:vertical{margin-top:var(--table-header-scroll-inset,0px)}
+
+/* Only the label sorts; column boundaries remain independent drag targets. */
+.sort-heading{cursor:default;align-items:center}.sort-heading-text,.sort-heading-text:hover:not(:disabled){display:inline;padding:0;min-height:0;min-width:0;width:auto;flex:0 1 auto;border:0;background:transparent;color:inherit;font:inherit;line-height:inherit;letter-spacing:inherit;text-transform:inherit;text-align:inherit;border-radius:0;cursor:pointer}.sort-heading-text:focus-visible{outline:1px solid var(--accent);outline-offset:3px}.sort-heading>svg{pointer-events:none;flex:none}
+.column-resize-handle{width:12px;left:-6px}.column-resize-handle::after{top:0;bottom:auto;height:var(--column-resize-guide-height,100%);left:4px;width:3px;pointer-events:none;transition:background-color .12s ease}.column-resize-handle:hover::after,.column-resize-handle:focus-visible::after,.column-resize-handle[data-dragging=true]::after{background:#7191ab80}
+.sort-heading-text{white-space:normal;overflow-wrap:inherit;max-width:100%}

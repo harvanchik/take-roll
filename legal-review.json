@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T22:32:13.138Z",
-  "note": "Inset vertical table scrollbar tracks below headers. Visual presentation only; no storage, data, access, or policy changes.",
-  "digest": "365c30fd50f6eab1925867bda83f560334589dce8cfdb667f765568e66862457"
+  "reviewedAt": "2026-11-17T22:42:48.531Z",
+  "note": "Sorting targets now match heading text, with a light-blue hover guide at draggable boundaries. Visual interaction only; existing policies and browser preference storage unchanged.",
+  "digest": "b18e1d839065757e62d31043a7e72729c7791c387a1f226c9389a7892cb0c993"
 }
