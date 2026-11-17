@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T19:47:25.079Z",
-  "note": "Sticky public landing header and optional back-to-top navigation change presentation only, with no changes to collection, storage, access, or agreements.",
-  "digest": "32d141fa2c031cf797d1b00cd1c2bdc50f9d8aa6a55630f33def9361a0513f60"
+  "reviewedAt": "2026-11-17T19:59:23.785Z",
+  "note": "Updated landing intro free-use wording and removed redundant header sign-in anchor. Sign-in controls and account/guest behavior remain unchanged; policies still accurate.",
+  "digest": "b765e72dba756ee696f92229dab924144003cc476890d5282aa464feee550e1d"
 }
