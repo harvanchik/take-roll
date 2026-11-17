@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T21:56:13.535Z",
-  "note": "Added numeric browser-only column width preferences for data tables, excluding calendar grids and icon-only columns. No server or record changes; existing preference-storage notice remains accurate.",
-  "digest": "6685d062d68ac5730675ea7b06943eb37200e043c3f6b7b4c33f155ecbf8bdce"
+  "reviewedAt": "2026-11-17T22:27:00.453Z",
+  "note": "Corrected table resize boundary behavior: adjacent column widths offset so the right edge remains fixed. Existing browser-local preferences and disclosures unchanged.",
+  "digest": "9db545f5e085e7e7af09092623b732f6dc9c21f56d5d77ac7c9f3265a82c2c48"
 }

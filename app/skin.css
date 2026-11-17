@@ -1795,3 +1795,6 @@ textarea{overflow-x:hidden}
 .resizable-column-heading{position:relative}.column-resize-handle{position:absolute;right:-5px;top:0;bottom:0;width:10px;z-index:25;cursor:col-resize;touch-action:none;user-select:none}.column-resize-handle::after{content:'';position:absolute;top:20%;bottom:20%;left:4px;width:2px;background:transparent}.column-resize-handle:hover::after,.column-resize-handle:focus-visible::after{background:var(--accent)}.column-resize-handle:focus-visible{outline:1px solid var(--accent)}html.resizing-table-column,html.resizing-table-column *{cursor:col-resize!important;user-select:none!important}
 
 table[data-columns-resized=true]>thead>tr>th,table[data-columns-resized=true]>tbody>tr>:is(th,td){width:auto!important;min-width:0!important;overflow-wrap:anywhere}
+
+/* Resize the start of a column; its far edge stays anchored. */
+.column-resize-handle{right:auto;left:-5px}
