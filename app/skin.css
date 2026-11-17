@@ -1782,3 +1782,10 @@ textarea{overflow-x:hidden}
 @media(max-width:900px){.auth-header{flex-wrap:wrap;gap:10px}.landing-nav{order:3;flex-basis:100%;margin:0;gap:20px;overflow-x:auto}.auth-header>.theme-toggle{margin-left:auto}.landing-faq h3{font-size:13px}}
 
 .landing-use-cases{grid-column:1/-1;max-width:900px}.landing-use-cases h2{font-size:24px;margin-bottom:12px}.landing-use-cases p,.landing-intro{font-size:14px;line-height:1.75;color:var(--muted)}.landing-intro{margin-top:14px;max-width:62ch}.landing-faq{grid-column:1/-1;min-width:0}.demo-roll-call .event-heading h3.editable-event-title{font-size:clamp(32px,3.25vw,54px);line-height:1.12}@media(max-width:1050px){.demo-roll-call .event-heading h3.editable-event-title{font-size:36px}}@media(max-width:760px){.demo-roll-call .event-heading h3.editable-event-title{font-size:27px}.landing-intro,.landing-use-cases p{font-size:13px}.landing-use-cases h2{font-size:22px}}
+
+/* Landing navigation stays available without covering anchor destinations. */
+.auth-landing>.auth-header{position:sticky;top:0;z-index:120;background:var(--bg)}
+.auth-landing [id]{scroll-margin-top:calc(var(--landing-header-height,140px) + 20px)}
+.auth-landing .landing-back-to-top{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:130;width:40px;height:40px;display:grid;place-items:center;padding:0;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:0;box-shadow:2px 2px 0 var(--skin-shadow)}
+.auth-landing .landing-back-to-top:hover{background:var(--skin-hover)}
+.auth-landing .landing-back-to-top:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
