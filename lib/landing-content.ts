@@ -50,5 +50,7 @@ export const landingFaqs=[
  }
 ];
 export const softwareApplication={
- '@context':'https://schema.org','@type':'SoftwareApplication',name:'TakeRoll',alternateName:'Take Roll',url:'https://takeroll.online/',description:landingDescription,applicationCategory:'BusinessApplication',operatingSystem:'Web browser',isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'},featureList:['Organizer-managed rosters','Events and subevents','Custom attendance statuses and excuse types','Attendance notes and history','Visual and text reports','Browser-only guest mode','Mobile attendance views','Live organization collaboration']
+ '@context':'https://schema.org','@type':'SoftwareApplication','@id':'https://takeroll.online/#application',name:'TakeRoll',alternateName:'Take Roll',url:'https://takeroll.online/',description:landingDescription,applicationCategory:'BusinessApplication',operatingSystem:'Web browser',browserRequirements:'Requires JavaScript for attendance workflows',inLanguage:'en',isAccessibleForFree:true,offers:{'@type':'Offer',price:'0',priceCurrency:'USD'},featureList:['Organizer-managed rosters','Events and subevents','Custom attendance statuses and excuse types','Attendance notes and history','Visual and text reports','Browser-only guest mode','Mobile attendance views','Live organization collaboration']
 };
+
+export const websiteIdentity={'@context':'https://schema.org','@type':'WebSite','@id':'https://takeroll.online/#website',url:'https://takeroll.online/',name:'TakeRoll',alternateName:'Take Roll',inLanguage:'en'};

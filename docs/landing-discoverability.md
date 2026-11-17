@@ -41,3 +41,9 @@
 12. How is attendance information protected?
 
 Two older UI test expectations were updated to match existing behavior: the removed browser-filter preference stays absent, and removed-roster restore/delete controls remain enabled even when local speech playback is unavailable. No roster or preference behavior was changed by these test adjustments.
+
+## Further discoverability improvements
+- Added a crawlable public /attendance-guide with verified setup steps, a neutral workflow comparison, record interpretation and links to the demo, guest entry and account FAQs. Included the guide in sitemap.xml and linked it from the landing use-case section.
+- Root title now describes a free online attendance taker and tracker. SoftwareApplication has a stable entity ID, language and browser requirements; WebSite JSON-LD declares the public product name and alternate spelling. No invented endorsements or ranking instructions.
+- Existing wildcard robots rules allow search crawlers, including OAI-SearchBot, while private routes remain excluded. No separate user-agent block was added because it could accidentally override the shared disallow rules.
+- Owner follow-up: verify the domain in Google Search Console and Bing Webmaster Tools, submit sitemap.xml, inspect the root and guide URLs, and monitor indexing/performance. Verification requires owner account access; source changes cannot guarantee indexing or ranking.
