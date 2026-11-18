@@ -1810,3 +1810,13 @@ table[data-columns-resized=true]>thead>tr>th,table[data-columns-resized=true]>tb
 /* Continue the header surface across the scrollbar gutter above its track. */
 [data-table-header-scroll=true]::-webkit-scrollbar:vertical{background:linear-gradient(to bottom,var(--table-header-scroll-background,var(--panel)) 0 calc(var(--table-header-scroll-inset,0px) - 1px),var(--border) calc(var(--table-header-scroll-inset,0px) - 1px) var(--table-header-scroll-inset,0px),var(--scroll-track) var(--table-header-scroll-inset,0px) 100%)}
 
+
+.subevent-count-badge{display:inline-flex;align-items:center;justify-content:center;flex:none;width:1.25em;height:1.25em;min-width:1.25em;font-size:inherit;line-height:1;background:#315b78;color:#fff;font-variant-numeric:tabular-nums;vertical-align:middle;border-radius:0}.recent-meta time{margin-right:0}.recent-meta .subevent-count-badge{margin-right:auto}.event-card p .subevent-count-badge{margin-left:3px}.event-options-popup{width:max-content;min-width:154px}
+
+.subevent-count-badge{display:inline-flex!important;align-items:center;justify-content:center;flex:none;min-width:1.1em;height:1.1em;padding:0 2px;box-sizing:border-box;background:#315c7b;color:#fff!important;font-size:inherit;line-height:1;font-weight:600;vertical-align:middle;border:0;border-radius:0}.recent-meta time{margin-right:0}.recent-meta .subevent-count-badge{margin-right:auto}.event-card p .subevent-count-badge{margin-left:4px}
+
+/* Column guides stay within their headers; broad invisible hit areas are easy to find. */
+.column-resize-handle{width:22px;left:-11px;top:0;bottom:0}.column-resize-handle::after{left:10px;top:4px;bottom:4px;height:auto;width:3px}.column-resize-handle:focus-visible{outline:0}
+.event-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.event-card-heading h3{display:flex;align-items:center;gap:9px;flex:1;min-width:0;margin:0}.event-card-heading h3>svg{flex:none;color:var(--accent)}.event-card-title-text{min-width:0;flex:1}.event-card-heading>.tag{flex:none}.event-card-details{margin-top:8px}.archive-list-toolbar>.search-box{flex:1 1 100%;width:100%;max-width:none}.events-grid>.archive-card{cursor:pointer}.archive-card-footer{border-top:1px solid var(--border);margin-top:14px;padding-top:10px}.archive-card-footer>.archive-actions{margin-left:auto}.archive-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.subevent-option.danger,.subevent-option.danger svg{color:var(--skin-danger)}
+
+.column-resize-handle{top:var(--column-header-offset,0px);bottom:auto;height:var(--column-header-height,100%)}.column-resize-handle::after{top:8px;bottom:8px}

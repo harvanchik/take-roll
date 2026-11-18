@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-17T22:50:21.077Z",
-  "note": "Matched scrollbar header gutters to actual header colors, including theme switches. Visual-only correction; existing notices unchanged.",
-  "digest": "5d7cfdc5f000295c2ced2112eee8d94b2834be9515257ec695b4369941d00653"
+  "reviewedAt": "2026-11-18T14:48:52.337Z",
+  "note": "Unified cards, sidebar menus, archive actions, subevent counts and header-only resize guides. Existing database permissions, permanent-delete confirmation, manual-draft protection and retry/conflict handling retained; policies remain accurate.",
+  "digest": "cc137ea61c412ef60beed05c6336a6e2355f899df2d9c0cecc33a1ca215f44b6"
 }

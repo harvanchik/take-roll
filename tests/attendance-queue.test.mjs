@@ -107,3 +107,13 @@ test('theme shortcut preference and attendance edits queue while a save is in fl
 test('roster notes save while attendance changes are queued',async()=>{
  const d=setup(),e=d.events[0],roster=d.rosters[0],p=roster.people[0],s=server(d);let release;const gate=new Promise(resolve=>release=resolve),q=new AttendanceQueue(d,0,async body=>{await gate;return s.send(body);},()=>{});q.enqueue({type:'roster-person-note',rosterId:roster.id,personId:p.id,note:'A shared note',before:''});q.enqueue({type:'status',eventId:e.id,personId:p.id,status:'Present'});assert.equal(q.data.personNotes[p.id],'A shared note');release();assert.equal(await q.flush(),true);assert.equal(s.data.personNotes[p.id],'A shared note');assert.equal(s.data.events[0].participants[0].status,'Present');
 });
+
+test('pin commands move immediately while saves wait, without saving manual attendance drafts',async()=>{
+ const d=setup(),e=d.events[0],manual={...d,preferences:{...defaultPreferences,autoSave:false}},s=server(manual);let release;const gate=new Promise(resolve=>release=resolve);const sent=[];const q=new AttendanceQueue(manual,0,async body=>{sent.push(body.action.type);await gate;return s.send(body);},()=>{});
+ q.enqueue({type:'person-note',eventId:e.id,personId:e.participants[0].id,note:'Manual draft'});
+ q.enqueueImmediate({type:'update-preferences',preferences:{...manual.preferences,pinnedEvents:[e.id]}});
+ assert.deepEqual(q.data.preferences.pinnedEvents,[e.id]);assert.deepEqual(sent,['update-preferences']);assert.equal(s.data.preferences.pinnedEvents.length,0);release();await new Promise(resolve=>setTimeout(resolve,20));assert.deepEqual(s.data.preferences.pinnedEvents,[e.id]);assert.equal(s.data.events[0].participants[0].note,'');assert.equal(q.data.events[0].participants[0].note,'Manual draft');
+});
+test('archive disappears immediately and a failed save stays retryable without data loss',async()=>{
+ const d=setup(),e=d.events[0],s=server(d);let release;const gate=new Promise(resolve=>release=resolve);let fail=true;const q=new AttendanceQueue(d,0,async body=>{await gate;if(fail)throw Error('Offline');return s.send(body);},()=>{});q.enqueueImmediate({type:'archive-event',eventId:e.id});assert.ok(q.data.events[0].archivedAt);assert.ok(!s.data.events[0].archivedAt);release();assert.equal(await q.flush(),false);assert.equal(q.snapshot().pending,1);fail=false;q.retry();assert.equal(await q.flush(),true);assert.ok(s.data.events[0].archivedAt);assert.equal(s.data.events[0].participants.length,e.participants.length);
+});
