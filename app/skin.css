@@ -1820,3 +1820,11 @@ table[data-columns-resized=true]>thead>tr>th,table[data-columns-resized=true]>tb
 .event-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.event-card-heading h3{display:flex;align-items:center;gap:9px;flex:1;min-width:0;margin:0}.event-card-heading h3>svg{flex:none;color:var(--accent)}.event-card-title-text{min-width:0;flex:1}.event-card-heading>.tag{flex:none}.event-card-details{margin-top:8px}.archive-list-toolbar>.search-box{flex:1 1 100%;width:100%;max-width:none}.events-grid>.archive-card{cursor:pointer}.archive-card-footer{border-top:1px solid var(--border);margin-top:14px;padding-top:10px}.archive-card-footer>.archive-actions{margin-left:auto}.archive-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.subevent-option.danger,.subevent-option.danger svg{color:var(--skin-danger)}
 
 .column-resize-handle{top:var(--column-header-offset,0px);bottom:auto;height:var(--column-header-height,100%)}.column-resize-handle::after{top:8px;bottom:8px}
+
+/* Keep the row actions together immediately after the last labeled track. */
+.attendance-table-scroll{--row-tools-width:58px}
+.attendance-table-scroll.removed-table{--row-tools-width:88px}
+.attendance-table-scroll .row-tools{justify-content:flex-start}
+.attendance-table-scroll .row-main > .timestamp-button{justify-self:end}
+.attendance-table-scroll .table-label > [data-column="Last Changed"]{justify-content:flex-end;text-align:right}
+.attendance-table-scroll .row-main > .timestamp-button{width:fit-content;max-width:100%;min-width:0;padding-inline:6px}

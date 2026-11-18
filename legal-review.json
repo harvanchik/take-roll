@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-11-18T14:48:52.337Z",
-  "note": "Unified cards, sidebar menus, archive actions, subevent counts and header-only resize guides. Existing database permissions, permanent-delete confirmation, manual-draft protection and retry/conflict handling retained; policies remain accurate.",
-  "digest": "cc137ea61c412ef60beed05c6336a6e2355f899df2d9c0cecc33a1ca215f44b6"
+  "reviewedAt": "2026-11-18T16:07:00.339Z",
+  "note": "Compact table column resizing and browser-only width reset shortcut. No changes to account data or policies.",
+  "digest": "2babc8eb104021275ba88a5919375611500d1e9a4f43a8d05837b7da8d09243a"
 }
